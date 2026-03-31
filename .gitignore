@@ -1,0 +1,24 @@
+# ─── Backend (Java/Maven) ───────────────────────
+Backend/target/
+Backend/.mvn/
+Backend/*.iml
+Backend/.idea/
+
+# ─── Frontend (React/Node) ──────────────────────
+Frontend/node_modules/
+Frontend/dist/
+Frontend/build/
+Frontend/.env
+Frontend/.env.local
+
+# ─── IntelliJ ───────────────────────────────────
+.idea/
+*.iml
+*.iws
+
+# ─── OS ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── uploads (صور الشخصية لا ترفعه) ───────────
+Backend/uploads/
