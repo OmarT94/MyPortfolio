@@ -1,30 +1,35 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: '/api',
-    headers: { 'Content-Type': 'application/json' },
+  baseURL: '/api',
+  headers: { 'Content-Type': 'application/json' }
 })
 
-// ─── Request Interceptor: أضف Token تلقائياً ─────────────────────────────────
+// ─── Request interceptor: أضف الـ token تلقائياً ─────────────────────────────
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token')
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
+  // تحقق من نوع المستخدم وأضف الـ token المناسب
+  const adminToken   = localStorage.getItem('adminToken')
+  const companyToken = localStorage.getItem('companyToken')
+
+  const token = adminToken ?? companyToken
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
+  return config
 })
 
-// ─── Response Interceptor: عالج انتهاء الجلسة ────────────────────────────────
+// ─── Response interceptor: معالجة أخطاء 401 / 403 ───────────────────────────
 api.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response?.status === 403) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            window.location.href = '/'
-        }
-        return Promise.reject(error)
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      localStorage.removeItem('adminToken')
+      localStorage.removeItem('companyToken')
+      window.location.href = '/'
     }
+    return Promise.reject(error)
+  }
 )
 
 export default api
