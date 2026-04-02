@@ -53,6 +53,8 @@ export const ProfileEditor = () => {
     const file = e.target.files?.[0]
     if (!file) return
     await uploadPhoto(file)
+    const updated= await profileApi.getAdmin()
+    useProfileStore.setState({ companyProfile: updated })
     toast.success('تم رفع الصورة ✅')
   }
 

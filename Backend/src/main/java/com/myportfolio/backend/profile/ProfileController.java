@@ -37,6 +37,12 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.updateProfile(request));
     }
 
+    @GetMapping("/admin/profile")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProfileDto.CompanyResponse> getAdminProfile() {
+        return ResponseEntity.ok(profileService.getCompanyProfile());
+    }
+
     @PostMapping("/admin/profile/photo")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> uploadPhoto(
