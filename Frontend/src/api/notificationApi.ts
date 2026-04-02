@@ -1,5 +1,5 @@
 import api from './axiosInstance'
-import type { Notification, UnreadCountResponse } from '../interfaces'
+import type { Notification, UnreadCountResponse } from '../types'
 
 export const notificationApi = {
   getAll: () =>

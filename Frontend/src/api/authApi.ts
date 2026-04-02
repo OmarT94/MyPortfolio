@@ -1,13 +1,28 @@
-import api from './axiosInstance'
 import type {
   LoginRequest, LoginResponse,
   CompanyTokenRequest, CompanyTokenResponse,
-} from '../interfaces'
+} from '../types'
+
+const BASE = 'http://localhost:8080/api'
 
 export const authApi = {
-  adminLogin: (data: LoginRequest) =>
-    api.post<LoginResponse>('/auth/admin/login', data).then(r => r.data),
+  adminLogin: async (data: LoginRequest): Promise<LoginResponse> => {
+    const res = await fetch(`${BASE}/auth/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Login failed')
+    return res.json()
+  },
 
-  companyLogin: (data: CompanyTokenRequest) =>
-    api.post<CompanyTokenResponse>('/auth/company/login', data).then(r => r.data),
+  companyLogin: async (data: CompanyTokenRequest): Promise<CompanyTokenResponse> => {
+    const res = await fetch(`${BASE}/auth/company/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Login failed')
+    return res.json()
+  },
 }

@@ -1,5 +1,5 @@
 import api from './axiosInstance'
-import type { Visit, LogVisitRequest, CompanyStats } from '../interfaces'
+import type { Visit, LogVisitRequest, CompanyStats } from '../types'
 
 export const visitApi = {
   // Public

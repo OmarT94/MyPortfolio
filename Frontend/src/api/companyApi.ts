@@ -1,24 +1,50 @@
-import api from './axiosInstance'
-import type {
-  Company, CreateCompanyRequest,
-  UpdateStatusRequest, TokenValidResponse,
-} from '../interfaces'
+import type { Company, CreateCompanyRequest, UpdateStatusRequest, TokenValidResponse } from '../types'
+
+const BASE = 'http://localhost:8080/api'
+
+const getToken = () => {
+  const raw = localStorage.getItem('auth-storage')
+  if (!raw) return null
+  try { return JSON.parse(raw).state?.token } catch { return null }
+}
+
+const authHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${getToken()}`,
+})
 
 export const companyApi = {
-  // Admin
-  create: (data: CreateCompanyRequest) =>
-    api.post<Company>('/admin/companies', data).then(r => r.data),
+  getAll: async (): Promise<Company[]> => {
+    const res = await fetch(`${BASE}/admin/companies`, { headers: authHeaders() })
+    if (!res.ok) throw new Error('Failed')
+    return res.json()
+  },
 
-  getAll: () =>
-    api.get<Company[]>('/admin/companies').then(r => r.data),
+  create: async (data: CreateCompanyRequest): Promise<Company> => {
+    const res = await fetch(`${BASE}/admin/companies`, {
+      method: 'POST', headers: authHeaders(), body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed')
+    return res.json()
+  },
 
-  updateStatus: (id: string, data: UpdateStatusRequest) =>
-    api.patch<Company>(`/admin/companies/${id}/status`, data).then(r => r.data),
+  updateStatus: async (id: string, data: UpdateStatusRequest): Promise<Company> => {
+    const res = await fetch(`${BASE}/admin/companies/${id}/status`, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error('Failed')
+    return res.json()
+  },
 
-  delete: (id: string) =>
-    api.delete(`/admin/companies/${id}`),
+  delete: async (id: string): Promise<void> => {
+    await fetch(`${BASE}/admin/companies/${id}`, {
+      method: 'DELETE', headers: authHeaders(),
+    })
+  },
 
-  // Public
-  validateToken: (token: string) =>
-    api.get<TokenValidResponse>(`/public/validate/${token}`).then(r => r.data),
+  validateToken: async (token: string): Promise<TokenValidResponse> => {
+    const res = await fetch(`${BASE}/public/validate/${token}`)
+    if (!res.ok) throw new Error('Failed')
+    return res.json()
+  },
 }

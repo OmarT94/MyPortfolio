@@ -24,14 +24,11 @@ export const useCompanyStore
 
   // ─── جلب كل الشركات ─────────────────────────────────────────────────────────
   fetchAll: async () => {
-    set({ isLoading: true, error: null })
     try {
       const data = await companyApi.getAll()
       set({ companies: data })
     } catch {
       set({ error: 'فشل تحميل الشركات' })
-    } finally {
-      set({ isLoading: false })
     }
   },
 

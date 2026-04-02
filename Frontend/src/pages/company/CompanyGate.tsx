@@ -22,16 +22,23 @@ export const CompanyGate = () => {
       return
     }
 
+    // إذا كان Admin لا تغيّر الـ role
+    const currentRole = useAuthStore.getState().role
+    if (currentRole === 'ADMIN') {
+      navigate('/company/view', { replace: true })
+      return
+    }
+
     authApi.companyLogin({ token })
-      .then((res) => {
-        if (res.valid && res.accessToken) {
-          setCompanyAuth(res.accessToken, res.companyName)
-          navigate('/company/view', { replace: true })
-        } else {
-          setError('هذا الرابط غير صالح أو انتهت صلاحيته')
-        }
-      })
-      .catch(() => setError('حدث خطأ — يرجى المحاولة مرة أخرى'))
+        .then((res) => {
+          if (res.valid && res.accessToken) {
+            setCompanyAuth(res.accessToken, res.companyName)
+            navigate('/company/view', { replace: true })
+          } else {
+            setError('هذا الرابط غير صالح أو انتهت صلاحيته')
+          }
+        })
+        .catch(() => setError('حدث خطأ — يرجى المحاولة مرة أخرى'))
   }, [token, navigate, setCompanyAuth])
 
   if (error) {

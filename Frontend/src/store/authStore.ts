@@ -3,46 +3,46 @@ import { persist } from 'zustand/middleware'
 import type { UserRole } from '../types'
 
 interface AuthStore {
-  token: string | null
-  role: UserRole
-  companyName: string | null
+    token: string | null
+    role: UserRole
+    companyName: string | null
+    _hydrated: boolean
 
-  // Actions
-  setAdminAuth: (token: string) => void
-  setCompanyAuth: (token: string, companyName: string) => void
-  logout: () => void
-  isAuthenticated: () => boolean
+    setAdminAuth: (token: string) => void
+    setCompanyAuth: (token: string, companyName: string) => void
+    logout: () => void
+    isAuthenticated: () => boolean
 }
 
 export const useAuthStore = create<AuthStore>()(
-  persist(
-    (set, get) => ({
-      token: null,
-      role: 'PUBLIC',
-      companyName: null,
+    persist(
+        (set, get) => ({
+            token: null,
+            role: 'PUBLIC',
+            companyName: null,
+            _hydrated: false,
 
-      // ─── Admin تسجيل دخول ──────────────────────────────────────────────────
-      setAdminAuth: (token) =>
-        set({ token, role: 'ADMIN', companyName: null }),
+            setAdminAuth: (token) =>
+                set({ token, role: 'ADMIN', companyName: null }),
 
-      // ─── Company تسجيل دخول ────────────────────────────────────────────────
-      setCompanyAuth: (token, companyName) =>
-        set({ token, role: 'COMPANY', companyName }),
+            setCompanyAuth: (token, companyName) =>
+                set({ token, role: 'COMPANY', companyName }),
 
-      // ─── تسجيل خروج ────────────────────────────────────────────────────────
-      logout: () =>
-        set({ token: null, role: 'PUBLIC', companyName: null }),
+            logout: () =>
+                set({ token: null, role: 'PUBLIC', companyName: null }),
 
-      // ─── هل هو مسجّل دخول؟ ─────────────────────────────────────────────────
-      isAuthenticated: () => get().token !== null,
-    }),
-    {
-      name: 'auth-storage', // اسم الـ key في localStorage
-      partialize: (state) => ({
-        token: state.token,
-        role: state.role,
-        companyName: state.companyName,
-      }),
-    }
-  )
+            isAuthenticated: () => get().token !== null,
+        }),
+        {
+            name: 'auth-storage',
+            partialize: (state) => ({
+                token: state.token,
+                role: state.role,
+                companyName: state.companyName,
+            }),
+            onRehydrateStorage: () => (state) => {
+                if (state) state._hydrated = true
+            },
+        }
+    )
 )
