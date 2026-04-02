@@ -14,6 +14,9 @@ export const profileApi = {
   update: (data: UpdateProfileRequest) =>
     api.put<CompanyProfile>('/admin/profile', data).then(r => r.data),
 
+  getAdmin: () =>
+      api.get<CompanyProfile>('/admin/profile').then(r => r.data),
+
   uploadPhoto: (file: File) => {
     const form = new FormData()
     form.append('file', file)
