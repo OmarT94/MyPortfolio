@@ -13,7 +13,7 @@ import { PageSpinner } from '../../components/ui'
 export const CompanyGate = () => {
   const { token } = useParams<{ token: string }>()
   const navigate = useNavigate()
-  const { setCompanyAuth, logout } = useAuthStore()
+    const { setCompanyAuth } = useAuthStore()
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -22,8 +22,9 @@ export const CompanyGate = () => {
       return
     }
 
-    // ✅ امسح أي جلسة سابقة (Admin أو غيره) قبل دخول الشركة
-    logout()
+
+
+
 
     authApi.companyLogin({ token })
         .then((res) => {
@@ -35,7 +36,7 @@ export const CompanyGate = () => {
           }
         })
         .catch(() => setError('حدث خطأ — يرجى المحاولة مرة أخرى'))
-  }, [token, navigate, setCompanyAuth, logout])
+  }, [token, navigate, setCompanyAuth])
 
   if (error) {
     return (

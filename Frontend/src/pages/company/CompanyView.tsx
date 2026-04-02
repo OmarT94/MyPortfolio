@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageSpinner } from '../../components/ui'
-import { useProfileStore, useAuthStore } from '../../store'
+import { useProfileStore } from '../../store'
 import { CompanyHeader } from './CompanyHeader'
 import { CompanyTabs }   from './CompanyTabs'
 
@@ -16,16 +16,16 @@ const CompanyNavbar = () => (
 
 export const CompanyView = () => {
     const navigate = useNavigate()
-    const { role } = useAuthStore()
     const { companyProfile, isLoading, fetchCompany } = useProfileStore()
 
     useEffect(() => {
-        if (role !== 'COMPANY') {
+        const companyToken = sessionStorage.getItem('company-token')
+        if (!companyToken) {
             navigate('/', { replace: true })
             return
         }
         fetchCompany()
-    }, [role, navigate, fetchCompany])
+    }, [navigate, fetchCompany])
 
     if (isLoading || !companyProfile) return <PageSpinner />
 

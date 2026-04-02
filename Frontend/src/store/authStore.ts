@@ -6,8 +6,6 @@ interface AuthStore {
     token: string | null
     role: UserRole
     companyName: string | null
-    _hydrated: boolean
-
     setAdminAuth: (token: string) => void
     setCompanyAuth: (token: string, companyName: string) => void
     logout: () => void
@@ -20,29 +18,18 @@ export const useAuthStore = create<AuthStore>()(
             token: null,
             role: 'PUBLIC',
             companyName: null,
-            _hydrated: false,
-
             setAdminAuth: (token) =>
                 set({ token, role: 'ADMIN', companyName: null }),
-
-            setCompanyAuth: (token, companyName) =>
-                set({ token, role: 'COMPANY', companyName }),
-
+            setCompanyAuth: (token, companyName) => {
+                // احفظ في sessionStorage منفصل عن الـ persist
+                sessionStorage.setItem('company-token', token)
+                sessionStorage.setItem('company-name', companyName ?? '')
+                // لا تكتب في الـ store — حتى لا يلوث localStorage
+            },
             logout: () =>
                 set({ token: null, role: 'PUBLIC', companyName: null }),
-
             isAuthenticated: () => get().token !== null,
         }),
-        {
-            name: 'auth-storage',
-            partialize: (state) => ({
-                token: state.token,
-                role: state.role,
-                companyName: state.companyName,
-            }),
-            onRehydrateStorage: () => (state) => {
-                if (state) state._hydrated = true
-            },
-        }
+        { name: 'auth-storage' }
     )
 )
