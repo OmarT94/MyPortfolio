@@ -13,7 +13,7 @@ import { PageSpinner } from '../../components/ui'
 export const CompanyGate = () => {
   const { token } = useParams<{ token: string }>()
   const navigate = useNavigate()
-  const { setCompanyAuth } = useAuthStore()
+  const { setCompanyAuth, logout } = useAuthStore()
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -22,12 +22,8 @@ export const CompanyGate = () => {
       return
     }
 
-    // إذا كان Admin لا تغيّر الـ role
-    const currentRole = useAuthStore.getState().role
-    if (currentRole === 'ADMIN') {
-      navigate('/company/view', { replace: true })
-      return
-    }
+    // ✅ امسح أي جلسة سابقة (Admin أو غيره) قبل دخول الشركة
+    logout()
 
     authApi.companyLogin({ token })
         .then((res) => {
@@ -39,20 +35,20 @@ export const CompanyGate = () => {
           }
         })
         .catch(() => setError('حدث خطأ — يرجى المحاولة مرة أخرى'))
-  }, [token, navigate, setCompanyAuth])
+  }, [token, navigate, setCompanyAuth, logout])
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center space-y-4">
-          <div className="text-6xl">🔒</div>
-          <h1 className="text-2xl font-bold text-slate-100">رابط غير صالح</h1>
-          <p className="text-slate-400 max-w-sm">{error}</p>
-          <p className="text-slate-600 text-sm">
-            إذا كنت تعتقد أن هذا خطأ، تواصل مع صاحب الملف الشخصي
-          </p>
+        <div className="min-h-screen flex items-center justify-center px-4">
+          <div className="text-center space-y-4">
+            <div className="text-6xl">🔒</div>
+            <h1 className="text-2xl font-bold text-slate-100">رابط غير صالح</h1>
+            <p className="text-slate-400 max-w-sm">{error}</p>
+            <p className="text-slate-600 text-sm">
+              إذا كنت تعتقد أن هذا خطأ، تواصل مع صاحب الملف الشخصي
+            </p>
+          </div>
         </div>
-      </div>
     )
   }
 
