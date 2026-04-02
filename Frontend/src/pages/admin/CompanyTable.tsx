@@ -1,0 +1,173 @@
+import { useState } from 'react'
+import { Plus, Copy, Trash2, ToggleLeft, ToggleRight, Check, ExternalLink } from 'lucide-react'
+import { Button, Badge, Modal, Input } from '../../components/ui'
+import { useCompanyStore } from '../../store'
+import type { Company } from '../../types'
+
+export const CompanyTable = () => {
+  const { companies, create, toggleStatus, remove, isLoading } = useCompanyStore()
+  const [showModal, setShowModal]   = useState(false)
+  const [copiedId, setCopiedId]     = useState<string | null>(null)
+  const [form, setForm]             = useState({ name: '', expiresInDays: 30 })
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await create(form)
+    setForm({ name: '', expiresInDays: 30 })
+    setShowModal(false)
+  }
+
+  const handleCopy = (company: Company) => {
+    navigator.clipboard.writeText(company.magicLink)
+    setCopiedId(company.id)
+    setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString('ar-SA', {
+      year: 'numeric', month: 'short', day: 'numeric',
+    })
+
+  return (
+    <div className="bg-slate-900 border border-slate-800 rounded-xl">
+
+      {/* Header */}
+      <div className="flex items-center justify-between p-5 border-b border-slate-800">
+        <h2 className="text-lg font-semibold text-slate-100">الشركات والروابط</h2>
+        <Button onClick={() => setShowModal(true)} size="sm">
+          <Plus size={15} /> شركة جديدة
+        </Button>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-slate-800 text-slate-500 text-xs">
+              <th className="text-right px-5 py-3 font-medium">الشركة</th>
+              <th className="text-right px-5 py-3 font-medium">الحالة</th>
+              <th className="text-right px-5 py-3 font-medium">الزيارات</th>
+              <th className="text-right px-5 py-3 font-medium">ينتهي</th>
+              <th className="text-right px-5 py-3 font-medium">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800/50">
+            {companies.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center py-12 text-slate-600">
+                  لا توجد شركات — أضف شركة جديدة
+                </td>
+              </tr>
+            ) : (
+              companies.map((company) => (
+                <tr key={company.id} className="hover:bg-slate-800/30 transition-colors">
+
+                  {/* Name */}
+                  <td className="px-5 py-4">
+                    <p className="font-medium text-slate-200">{company.name}</p>
+                    <p className="text-xs text-slate-600 mt-0.5 truncate max-w-[180px]">
+                      {company.token}
+                    </p>
+                  </td>
+
+                  {/* Status */}
+                  <td className="px-5 py-4">
+                    <Badge variant={company.active ? 'success' : 'danger'}>
+                      {company.active ? 'نشط' : 'معطّل'}
+                    </Badge>
+                  </td>
+
+                  {/* Visits */}
+                  <td className="px-5 py-4 text-slate-400">
+                    {company.visitCount} زيارة
+                  </td>
+
+                  {/* Expires */}
+                  <td className="px-5 py-4 text-slate-500 text-xs">
+                    {formatDate(company.expiresAt)}
+                  </td>
+
+                  {/* Actions */}
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-1">
+
+                      {/* Copy Link */}
+                      <button
+                        onClick={() => handleCopy(company)}
+                        title="نسخ الرابط"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-primary-400 hover:bg-slate-800 transition-colors"
+                      >
+                        {copiedId === company.id ? <Check size={15} className="text-emerald-400" /> : <Copy size={15} />}
+                      </button>
+
+                      {/* Open Link */}
+                      <a
+                        href={company.magicLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="فتح الرابط"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-primary-400 hover:bg-slate-800 transition-colors"
+                      >
+                        <ExternalLink size={15} />
+                      </a>
+
+                      {/* Toggle Status */}
+                      <button
+                        onClick={() => toggleStatus(company.id, company.active)}
+                        title={company.active ? 'تعطيل' : 'تفعيل'}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition-colors"
+                      >
+                        {company.active
+                          ? <ToggleRight size={15} className="text-emerald-400" />
+                          : <ToggleLeft size={15} />
+                        }
+                      </button>
+
+                      {/* Delete */}
+                      <button
+                        onClick={() => remove(company.id)}
+                        title="حذف"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Modal — إنشاء شركة */}
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="إضافة شركة جديدة">
+        <form onSubmit={handleCreate} className="space-y-4">
+          <Input
+            label="اسم الشركة"
+            placeholder="مثال: Samsung"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+          />
+          <Input
+            label="صلاحية الرابط (أيام)"
+            type="number"
+            min={1}
+            max={365}
+            value={form.expiresInDays}
+            onChange={(e) => setForm({ ...form, expiresInDays: Number(e.target.value) })}
+          />
+          <div className="flex gap-3 pt-2">
+            <Button type="submit" className="flex-1" isLoading={isLoading}>
+              إنشاء الرابط
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => setShowModal(false)}>
+              إلغاء
+            </Button>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  )
+}
