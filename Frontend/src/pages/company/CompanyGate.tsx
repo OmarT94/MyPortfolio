@@ -25,9 +25,6 @@ export const CompanyGate = () => {
     }
 
 
-
-
-
     authApi.companyLogin({ token })
         .then((res) => {
           if (res.valid && res.accessToken) {
