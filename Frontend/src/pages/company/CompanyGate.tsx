@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import {authApi, visitApi} from '../../api'
 import { useAuthStore } from '../../store'
 import { PageSpinner } from '../../components/ui'
+import { useI18nStore } from '../../i18n'
 
 // هذه الصفحة تعمل كـ Gate:
 // 1. تأخذ الـ token من الرابط
@@ -15,6 +16,7 @@ export const CompanyGate = () => {
   const navigate = useNavigate()
     const { setCompanyAuth } = useAuthStore()
   const [error, setError] = useState<string | null>(null)
+    const { setLanguage } = useI18nStore()
 
   useEffect(() => {
     if (!token) {
@@ -29,6 +31,7 @@ export const CompanyGate = () => {
     authApi.companyLogin({ token })
         .then((res) => {
           if (res.valid && res.accessToken) {
+              if (res.language) setLanguage(res.language as 'ar' | 'en' | 'de')
               visitApi.log({ companyToken: token, pagesViewed: ['profile'], durationSeconds: 0 })
               setCompanyAuth(res.accessToken, res.companyName)
             navigate('/company/view', { replace: true })
