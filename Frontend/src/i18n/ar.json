@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "about": "عني",
+    "projects": "المشاريع",
+    "skills": "المهارات",
+    "contact": "تواصل"
+  },
+  "hero": {
+    "greeting": "مرحباً، أنا",
+    "available": "متاح للعمل",
+    "downloadCv": "تحميل السيرة الذاتية",
+    "contactMe": "تواصل معي"
+  },
+  "about": {
+    "title": "نبذة عني",
+    "subtitle": "مطور برمجيات شغوف بصناعة منتجات رقمية متميزة",
+    "name": "الاسم",
+    "location": "الموقع",
+    "email": "البريد"
+  },
+  "projects": {
+    "title": "المشاريع",
+    "subtitle": "أبرز الأعمال التي أنجزتها",
+    "viewCode": "الكود",
+    "viewLive": "معاينة",
+    "technologies": "التقنيات",
+    "noProjects": "لا توجد مشاريع بعد"
+  },
+  "certificates": {
+    "title": "الشهادات",
+    "subtitle": "شهاداتي ومؤهلاتي المهنية",
+    "verify": "تحقق"
+  },
+  "skills": {
+    "title": "المهارات",
+    "levels": {
+      "Beginner": "مبتدئ",
+      "Intermediate": "متوسط",
+      "Advanced": "متقدم"
+    },
+    "categories": {
+      "Frontend": "واجهات المستخدم",
+      "Backend": "الخادم",
+      "Database": "قواعد البيانات",
+      "DevOps": "ديف أوبس",
+      "Other": "أخرى"
+    }
+  },
+  "contact": {
+    "title": "تواصل معي",
+    "subtitle": "هل لديك فرصة عمل؟ أنا مهتم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "location": "الموقع",
+    "name": "الاسم",
+    "message": "الرسالة",
+    "send": "إرسال الرسالة",
+    "sent": "تم الإرسال!",
+    "placeholder": {
+      "name": "اسمك الكريم",
+      "email": "example@email.com",
+      "message": "اكتب رسالتك هنا..."
+    }
+  },
+  "company": {
+    "welcome": "مرحباً",
+    "accessGranted": "تم التحقق من هويتك — يمكنك الاطلاع على الملف الكامل",
+    "expired": "انتهت صلاحية الرابط",
+    "invalid": "الرابط غير صالح",
+    "privateView": "أنت تشاهد الملف الشخصي الكامل — هذه الصفحة خاصة بك",
+    "downloadCv": "تحميل السيرة الذاتية"
+  },
+  "admin": {
+    "dashboard": "لوحة التحكم",
+    "companies": "الشركات",
+    "visits": "الزيارات",
+    "notifications": "الإشعارات",
+    "profile": "البروفايل",
+    "createLink": "شركة جديدة",
+    "companyName": "اسم الشركة",
+    "expiresIn": "ينتهي خلال",
+    "days": "يوم",
+    "active": "نشط",
+    "inactive": "معطّل",
+    "visitsCount": "زيارة",
+    "lastVisit": "آخر زيارة",
+    "noVisits": "لا توجد زيارات بعد",
+    "noCompanies": "لا توجد شركات — أضف شركة جديدة",
+    "copyLink": "نسخ الرابط",
+    "linkCopied": "تم نسخ الرابط!",
+    "deleteConfirm": "هل أنت متأكد من الحذف؟",
+    "logout": "تسجيل الخروج",
+    "editProfile": "تعديل البروفايل",
+    "saveChanges": "حفظ التغييرات",
+    "uploadPhoto": "رفع صورة",
+    "welcome": "مرحباً",
+    "subtitle": "إليك ملخص نشاط ملفك الشخصي"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "close": "إغلاق",
+    "add": "إضافة",
+    "noData": "لا توجد بيانات بعد"
+  }
+}

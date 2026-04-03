@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über mich",
+    "projects": "Projekte",
+    "skills": "Fähigkeiten",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "greeting": "Hallo, ich bin",
+    "available": "Verfügbar für Arbeit",
+    "downloadCv": "Lebenslauf herunterladen",
+    "contactMe": "Kontakt aufnehmen"
+  },
+  "about": {
+    "title": "Über mich",
+    "subtitle": "Ein leidenschaftlicher Softwareentwickler",
+    "name": "Name",
+    "location": "Standort",
+    "email": "E-Mail"
+  },
+  "projects": {
+    "title": "Projekte",
+    "subtitle": "Meine bemerkenswertesten Arbeiten",
+    "viewCode": "Code",
+    "viewLive": "Live Demo",
+    "technologies": "Technologien",
+    "noProjects": "Noch keine Projekte"
+  },
+  "certificates": {
+    "title": "Zertifikate",
+    "subtitle": "Meine professionellen Zertifizierungen",
+    "verify": "Verifizieren"
+  },
+  "skills": {
+    "title": "Fähigkeiten",
+    "levels": {
+      "Beginner": "Anfänger",
+      "Intermediate": "Mittelstufe",
+      "Advanced": "Fortgeschritten"
+    },
+    "categories": {
+      "Frontend": "Frontend",
+      "Backend": "Backend",
+      "Database": "Datenbank",
+      "DevOps": "DevOps",
+      "Other": "Sonstiges"
+    }
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Haben Sie eine Stelle? Ich bin interessiert",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "location": "Standort",
+    "name": "Name",
+    "message": "Nachricht",
+    "send": "Nachricht senden",
+    "sent": "Gesendet!",
+    "placeholder": {
+      "name": "Ihr Name",
+      "email": "ihre@email.com",
+      "message": "Schreiben Sie Ihre Nachricht hier..."
+    }
+  },
+  "company": {
+    "welcome": "Willkommen",
+    "accessGranted": "Identität verifiziert — Sie können das vollständige Profil einsehen",
+    "expired": "Link ist abgelaufen",
+    "invalid": "Ungültiger Link",
+    "privateView": "Sie sehen das vollständige Profil — diese Seite ist privat für Sie",
+    "downloadCv": "Lebenslauf herunterladen"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "companies": "Unternehmen",
+    "visits": "Besuche",
+    "notifications": "Benachrichtigungen",
+    "profile": "Profil",
+    "createLink": "Neues Unternehmen",
+    "companyName": "Unternehmensname",
+    "expiresIn": "Läuft ab in",
+    "days": "Tagen",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "visitsCount": "Besuche",
+    "lastVisit": "Letzter Besuch",
+    "noVisits": "Noch keine Besuche",
+    "noCompanies": "Keine Unternehmen — fügen Sie eines hinzu",
+    "copyLink": "Link kopieren",
+    "linkCopied": "Link kopiert!",
+    "deleteConfirm": "Sind Sie sicher, dass Sie löschen möchten?",
+    "logout": "Abmelden",
+    "editProfile": "Profil bearbeiten",
+    "saveChanges": "Änderungen speichern",
+    "uploadPhoto": "Foto hochladen",
+    "welcome": "Willkommen",
+    "subtitle": "Hier ist eine Zusammenfassung Ihrer Portfolio-Aktivität"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Ein Fehler ist aufgetreten",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "add": "Hinzufügen",
+    "noData": "Noch keine Daten"
+  }
+}

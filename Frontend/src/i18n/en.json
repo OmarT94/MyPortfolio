@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "available": "Available for work",
+    "downloadCv": "Download CV",
+    "contactMe": "Contact Me"
+  },
+  "about": {
+    "title": "About Me",
+    "subtitle": "A passionate software developer creating outstanding digital products",
+    "name": "Name",
+    "location": "Location",
+    "email": "Email"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "My most notable works",
+    "viewCode": "Code",
+    "viewLive": "Live Demo",
+    "technologies": "Technologies",
+    "noProjects": "No projects yet"
+  },
+  "certificates": {
+    "title": "Certificates",
+    "subtitle": "My professional certifications",
+    "verify": "Verify"
+  },
+  "skills": {
+    "title": "Skills",
+    "levels": {
+      "Beginner": "Beginner",
+      "Intermediate": "Intermediate",
+      "Advanced": "Advanced"
+    },
+    "categories": {
+      "Frontend": "Frontend",
+      "Backend": "Backend",
+      "Database": "Database",
+      "DevOps": "DevOps",
+      "Other": "Other"
+    }
+  },
+  "contact": {
+    "title": "Contact Me",
+    "subtitle": "Have a job opportunity? I'm interested",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "name": "Name",
+    "message": "Message",
+    "send": "Send Message",
+    "sent": "Sent!",
+    "placeholder": {
+      "name": "Your name",
+      "email": "your@email.com",
+      "message": "Write your message here..."
+    }
+  },
+  "company": {
+    "welcome": "Welcome",
+    "accessGranted": "Identity verified — you can view the full profile",
+    "expired": "Link has expired",
+    "invalid": "Invalid link",
+    "privateView": "You are viewing the full profile — this page is private to you",
+    "downloadCv": "Download CV"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "companies": "Companies",
+    "visits": "Visits",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "createLink": "New Company",
+    "companyName": "Company Name",
+    "expiresIn": "Expires in",
+    "days": "days",
+    "active": "Active",
+    "inactive": "Inactive",
+    "visitsCount": "Visits",
+    "lastVisit": "Last visit",
+    "noVisits": "No visits yet",
+    "noCompanies": "No companies — add a new one",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link copied!",
+    "deleteConfirm": "Are you sure you want to delete?",
+    "logout": "Logout",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "uploadPhoto": "Upload Photo",
+    "welcome": "Welcome",
+    "subtitle": "Here's a summary of your portfolio activity"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "add": "Add",
+    "noData": "No data yet"
+  }
+}

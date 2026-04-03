@@ -7,6 +7,7 @@ import { VisitsTable } from './VisitsTable'
 import { LayoutDashboard, UserCog } from 'lucide-react'
 import { ProfileEditor } from './ProfileEditor'
 import { useWebSocket } from '../../hooks/useWebSocket'
+import { useT } from '../../i18n'
 
 export const AdminDashboard = () => {
   const token       = useAuthStore((state) => state.token)
@@ -16,6 +17,7 @@ export const AdminDashboard = () => {
   const unreadCount = useNotificationStore((state) => state.unreadCount)
   const fetched     = useRef(false)
   const [activeTab, setActiveTab] = useState('dashboard')
+  const { t } = useT()
   useWebSocket()
 
 
@@ -38,14 +40,15 @@ export const AdminDashboard = () => {
           {/* Header + Tabs */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-slate-100">لوحة التحكم</h1>
-              <p className="text-slate-500 text-sm mt-1">مرحباً — إليك ملخص نشاط ملفك الشخصي</p>
+              <h1>{t('admin.dashboard')}</h1>
+              <p>{t('admin.subtitle')}</p>
             </div>
 
             <div className="flex gap-1 bg-slate-900 border border-slate-800 rounded-xl p-1">
               {[
-                { id: 'dashboard', label: 'Dashboard',       icon: LayoutDashboard },
-                { id: 'profile',   label: 'تعديل البروفايل', icon: UserCog },
+                // ✅ بعد — بعد إضافة const { t } = useT()
+                { id: 'dashboard', label: t('admin.dashboard'),   icon: LayoutDashboard },
+                { id: 'profile',   label: t('admin.editProfile'), icon: UserCog         },
               ].map(({ id, label, icon: Icon }) => (
                   <button key={id} onClick={() => setActiveTab(id)}
                           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all

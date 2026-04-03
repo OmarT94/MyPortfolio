@@ -27,11 +27,10 @@ export const useWebSocket = () => {
 
         // الاشتراك في قناة الإشعارات
         client.subscribe('/topic/notifications', (message) => {
-          console.log('📩 Message received:', message.body)
           const notification: Notification = JSON.parse(message.body)
           addNotification(notification)
 
-          // ← أضف هذا
+
           useCompanyStore.getState().fetchAll()
           useVisitStore.getState().fetchAll()
           useVisitStore.getState().fetchStats()
