@@ -24,4 +24,12 @@ export const profileApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then(r => r.data)
   },
+
+  uploadCv: (file: File) => {
+    const form = new FormData()
+    form.append('file', file)
+    return api.post<string>('/admin/profile/cv', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(r => r.data)
+  },
 }
