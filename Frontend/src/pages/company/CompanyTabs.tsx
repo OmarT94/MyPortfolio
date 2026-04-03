@@ -4,21 +4,24 @@ import { ProjectCard, CertificateCard, SkillBar, EmptyState } from '../../compon
 import type { CompanyProfile } from '../../types'
 import { useVisitTracker } from '../../hooks/useVisitTracker'
 import { useAuthStore } from '../../store'
+import { useT } from '../../i18n'
 
 interface CompanyTabsProps {
   profile: CompanyProfile
 }
 
-const TABS = [
-  { id: 'projects',      label: 'المشاريع',   icon: FolderOpen },
-  { id: 'certificates',  label: 'الشهادات',   icon: Award      },
-  { id: 'skills',        label: 'المهارات',   icon: Code       },
-]
 
 export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
   const [activeTab, setActiveTab] = useState('projects')
   const { token } = useAuthStore()
   const { trackPage } = useVisitTracker(token)
+  const { t } = useT()
+
+  const TABS = [
+    { id: 'projects',     label: t('projects.title'),     icon: FolderOpen },
+    { id: 'certificates', label: t('certificates.title'), icon: Award      },
+    { id: 'skills',       label: t('skills.title'),       icon: Code       },
+  ]
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
@@ -67,7 +70,7 @@ export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
         ) : (
           <EmptyState
             icon={<FolderOpen size={48} />}
-            title="لا توجد مشاريع بعد"
+            title={t('projects.noProjects')}  //
           />
         )
       )}
@@ -83,7 +86,7 @@ export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
         ) : (
           <EmptyState
             icon={<Award size={48} />}
-            title="لا توجد شهادات بعد"
+            title={t('certificates.title')}
           />
         )
       )}
@@ -108,7 +111,7 @@ export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
         ) : (
           <EmptyState
             icon={<Code size={48} />}
-            title="لا توجد مهارات بعد"
+            title={t('skills.title')}
           />
         )
       )}

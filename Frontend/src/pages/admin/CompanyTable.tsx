@@ -8,12 +8,12 @@ export const CompanyTable = () => {
   const { companies, create, toggleStatus, remove, isLoading } = useCompanyStore()
   const [showModal, setShowModal]   = useState(false)
   const [copiedId, setCopiedId]     = useState<string | null>(null)
-  const [form, setForm]             = useState({ name: '', expiresInDays: 30 })
+  const [form, setForm]             = useState({ name: '', expiresInDays: 30, language: 'en' })
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     await create(form)
-    setForm({ name: '', expiresInDays: 30 })
+    setForm({ name: '', expiresInDays: 30, language: 'en' })
     setShowModal(false)
   }
 
@@ -144,20 +144,31 @@ export const CompanyTable = () => {
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="إضافة شركة جديدة">
         <form onSubmit={handleCreate} className="space-y-4">
           <Input
-            label="اسم الشركة"
-            placeholder="مثال: Samsung"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
+              label="اسم الشركة"
+              placeholder="مثال: Samsung"
+              value={form.name}
+              onChange={(e) => setForm({...form, name: e.target.value})}
+              required
           />
           <Input
-            label="صلاحية الرابط (أيام)"
-            type="number"
-            min={1}
-            max={365}
-            value={form.expiresInDays}
-            onChange={(e) => setForm({ ...form, expiresInDays: Number(e.target.value) })}
+              label="صلاحية الرابط (أيام)"
+              type="number"
+              min={1}
+              max={365}
+              value={form.expiresInDays}
+              onChange={(e) => setForm({...form, expiresInDays: Number(e.target.value)})}
           />
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-slate-300">لغة الشركة</label>
+            <select
+                value={form.language}
+                onChange={(e) => setForm({...form, language: e.target.value})}
+                className="px-3 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
+              <option value="en">🇬🇧 English</option>
+              <option value="de">🇩🇪 Deutsch</option>
+              <option value="ar">🇸🇦 العربية</option>
+            </select>
+          </div>
           <div className="flex gap-3 pt-2">
             <Button type="submit" className="flex-1" isLoading={isLoading}>
               إنشاء الرابط
