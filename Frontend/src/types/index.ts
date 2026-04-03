@@ -19,6 +19,7 @@ export interface CompanyTokenResponse {
     accessToken: string
     companyName: string
     valid: boolean
+    language?: string
 }
 
 // ─── Company ──────────────────────────────────────────────────────────────────
@@ -32,6 +33,7 @@ export interface Company {
     expiresAt: string
     createdAt: string
     visitCount: number
+    language: string
 }
 
 export interface CreateCompanyRequest {
