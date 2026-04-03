@@ -2,8 +2,10 @@ package com.myportfolio.backend.auth;
 
 import com.myportfolio.backend.company.Company;
 import com.myportfolio.backend.company.CompanyRepo;
+import com.myportfolio.backend.notification.NotificationEvent;
 import com.myportfolio.backend.security.JwtService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ public class AuthService {
 
     private final JwtService jwtService;
     private final CompanyRepo companyRepo;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Value("${admin.username}")
     private String adminUsername;
@@ -20,9 +23,10 @@ public class AuthService {
     @Value("${admin.password}")
     private String adminPassword;
 
-    public AuthService(JwtService jwtService, CompanyRepo companyRepo) {
+    public AuthService(JwtService jwtService, CompanyRepo companyRepo, ApplicationEventPublisher eventPublisher) {
         this.jwtService = jwtService;
         this.companyRepo = companyRepo;
+        this.eventPublisher = eventPublisher;
     }
 
     public AuthDto.LoginResponse adminLogin(AuthDto.LoginRequest request) {
@@ -43,6 +47,15 @@ public class AuthService {
         }
 
         String jwt = jwtService.generateCompanyToken(company.getId(), company.getName());
+
+
+        company.setVisitCount(company.getVisitCount() + 1);
+        companyRepo.save(company);
+        eventPublisher.publishEvent(
+                new NotificationEvent(this,
+                        "🏢 " + company.getName() + " دخلت للتو إلى ملفك الشخصي!")
+        );
+
         return new AuthDto.CompanyTokenResponse(jwt, company.getName(), true);
     }
 }

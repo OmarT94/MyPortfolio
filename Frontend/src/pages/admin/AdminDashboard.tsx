@@ -6,6 +6,7 @@ import { CompanyTable } from './CompanyTable'
 import { VisitsTable } from './VisitsTable'
 import { LayoutDashboard, UserCog } from 'lucide-react'
 import { ProfileEditor } from './ProfileEditor'
+import { useWebSocket } from '../../hooks/useWebSocket'
 
 export const AdminDashboard = () => {
   const token       = useAuthStore((state) => state.token)
@@ -15,6 +16,7 @@ export const AdminDashboard = () => {
   const unreadCount = useNotificationStore((state) => state.unreadCount)
   const fetched     = useRef(false)
   const [activeTab, setActiveTab] = useState('dashboard')
+  useWebSocket()
 
   useEffect(() => {
     if (fetched.current || !token) return

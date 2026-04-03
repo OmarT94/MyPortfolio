@@ -8,18 +8,22 @@ import type { Notification } from '../types'
 
 export const useWebSocket = () => {
   const clientRef = useRef<Client | null>(null)
-  const { role } = useAuthStore()
+  const role = useAuthStore((state) => state.role)
   const { addNotification } = useNotificationStore()
 
+
   useEffect(() => {
+
     // WebSocket فقط للـ Admin
+
     if (role !== 'ADMIN') return
 
     const client = new Client({
-      webSocketFactory: () => new SockJS('/ws'),
+      webSocketFactory: () => {
+        return new SockJS('/ws')
+      },
 
       onConnect: () => {
-        console.log('🔌 WebSocket connected')
 
         // الاشتراك في قناة الإشعارات
         client.subscribe('/topic/notifications', (message) => {
