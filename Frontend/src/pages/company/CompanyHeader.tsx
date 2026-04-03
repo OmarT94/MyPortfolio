@@ -16,7 +16,7 @@ interface CompanyHeaderProps {
 export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
   const { t } = useT()
   const [showCv, setShowCv] = useState(false)
-  const cvFullUrl = profile.cvUrl ? `http://localhost:8080${profile.cvUrl}` : null
+  const cvFullUrl = profile.cvUrl ? `http://localhost:3011${profile.cvUrl}` : null
 
   return (
       <>
