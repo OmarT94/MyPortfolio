@@ -1,6 +1,6 @@
 package com.myportfolio.backend.company;
 
-import com.myportfolio.backend.notification.NotificationEvent;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -71,12 +71,6 @@ public class CompanyService {
                 response.setCompanyId(company.getId());
                 company.setVisitCount(company.getVisitCount() + 1);
                 companyRepo.save(company);
-
-                // ✅ بدلاً من استدعاء NotificationService مباشرة
-                eventPublisher.publishEvent(
-                        new NotificationEvent(this,
-                                "🏢 " + company.getName() + " دخلت للتو إلى ملفك الشخصي!")
-                );
             }
         }, () -> response.setValid(false));
 
