@@ -49,4 +49,11 @@ public class ProfileController {
             @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(profileService.uploadPhoto(file));
     }
+
+    @PostMapping("/admin/profile/cv")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> uploadCv(
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(profileService.uploadCv(file));
+    }
 }

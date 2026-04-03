@@ -91,4 +91,16 @@ public class ProfileService {
         }
         return profiles.get(0);
     }
+
+    public String uploadCv(MultipartFile file) throws IOException {
+        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Path uploadPath = Paths.get("uploads/");
+        Files.createDirectories(uploadPath);
+        Files.copy(file.getInputStream(), uploadPath.resolve(filename));
+        String cvUrl = "/uploads/" + filename;
+        Profile profile = getOrCreateProfile();
+        profile.setCvUrl(cvUrl);
+        profileRepo.save(profile);
+        return cvUrl;
+    }
 }
