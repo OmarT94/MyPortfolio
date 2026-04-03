@@ -9,6 +9,7 @@ import {profileApi} from "../../api";
 export const ProfileEditor = () => {
   const { companyProfile, isLoading, updateProfile, uploadPhoto } = useProfileStore()
   const fileRef = useRef<HTMLInputElement>(null)
+  const cvRef   = useRef<HTMLInputElement>(null)
 
   const [form, setForm] = useState({
     fullName: '', title: '', bio: '', email: '',
@@ -56,6 +57,14 @@ export const ProfileEditor = () => {
     const updated= await profileApi.getAdmin()
     useProfileStore.setState({ companyProfile: updated })
     toast.success('تم رفع الصورة ✅')
+  }
+
+  const handleCv = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const url = await profileApi.uploadCv(file)
+    setForm(prev => ({ ...prev, cvUrl: url }))
+    toast.success('تم رفع الـ CV ✅')
   }
 
   // ─── Projects helpers ────────────────────────────────────────────────────────
@@ -158,6 +167,30 @@ export const ProfileEditor = () => {
             placeholder="اكتب نبذة مختصرة عنك..."
             className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
           />
+        </div>
+      </Card>
+
+      {/* CV */}
+      <Card>
+        <CardTitle className="mb-4">السيرة الذاتية (PDF)</CardTitle>
+        <div className="flex items-center gap-6">
+          {form.cvUrl ? (
+              <div className="flex items-center gap-3">
+                <span className="text-emerald-400 text-sm">✅ CV مرفوع</span>
+                <a href={`http://localhost:8080${form.cvUrl}`}
+                   target="_blank" rel="noreferrer"
+                   className="text-xs text-primary-400 hover:underline">
+                  معاينة
+                </a>
+              </div>
+          ) : (
+              <span className="text-slate-500 text-sm">لم يُرفع CV بعد</span>
+          )}
+          <Button variant="secondary" size="sm" onClick={() => cvRef.current?.click()}>
+            <Upload size={14} /> رفع CV جديد
+          </Button>
+          <input ref={cvRef} type="file" accept=".pdf"
+                 className="hidden" onChange={handleCv} />
         </div>
       </Card>
 
