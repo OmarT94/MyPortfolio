@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 import toast from 'react-hot-toast'
-import { useNotificationStore } from '../store'
+import {useCompanyStore, useNotificationStore, useVisitStore} from '../store'
 import { useAuthStore } from '../store'
 import type { Notification } from '../types'
 
@@ -27,10 +27,16 @@ export const useWebSocket = () => {
 
         // الاشتراك في قناة الإشعارات
         client.subscribe('/topic/notifications', (message) => {
+          console.log('📩 Message received:', message.body)
           const notification: Notification = JSON.parse(message.body)
           addNotification(notification)
 
-          // Toast فوري في الشاشة
+          // ← أضف هذا
+          useCompanyStore.getState().fetchAll()
+          useVisitStore.getState().fetchAll()
+          useVisitStore.getState().fetchStats()
+          useNotificationStore.getState().fetchUnreadCount()
+
           toast(notification.message, {
             icon: '🔔',
             duration: 5000,

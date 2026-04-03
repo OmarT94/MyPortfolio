@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { authApi } from '../../api'
+import {authApi, visitApi} from '../../api'
 import { useAuthStore } from '../../store'
 import { PageSpinner } from '../../components/ui'
 
@@ -29,7 +29,8 @@ export const CompanyGate = () => {
     authApi.companyLogin({ token })
         .then((res) => {
           if (res.valid && res.accessToken) {
-            setCompanyAuth(res.accessToken, res.companyName)
+              visitApi.log({ companyToken: token, pagesViewed: ['profile'], durationSeconds: 0 })
+              setCompanyAuth(res.accessToken, res.companyName)
             navigate('/company/view', { replace: true })
           } else {
             setError('هذا الرابط غير صالح أو انتهت صلاحيته')
