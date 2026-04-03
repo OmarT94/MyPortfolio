@@ -43,7 +43,7 @@ public class AuthService {
 
         if (company == null || !company.isActive()
                 || company.getExpiresAt().isBefore(LocalDateTime.now())) {
-            return new AuthDto.CompanyTokenResponse(null, null, false);
+            return new AuthDto.CompanyTokenResponse(null, null, false, null);
         }
 
         String jwt = jwtService.generateCompanyToken(company.getId(), company.getName());
@@ -56,6 +56,6 @@ public class AuthService {
                         "🏢 " + company.getName() + " دخلت للتو إلى ملفك الشخصي!")
         );
 
-        return new AuthDto.CompanyTokenResponse(jwt, company.getName(), true);
+        return new AuthDto.CompanyTokenResponse(jwt, company.getName(), true, company.getLanguage());
     }
 }

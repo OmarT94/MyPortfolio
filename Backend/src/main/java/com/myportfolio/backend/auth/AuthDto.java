@@ -42,11 +42,13 @@ public class AuthDto {
         private String accessToken;
         private String companyName;
         private boolean valid;
+        private String language;
 
-        public CompanyTokenResponse(String accessToken, String companyName, boolean valid) {
+        public CompanyTokenResponse(String accessToken, String companyName, boolean valid, String language) {
             this.accessToken = accessToken;
             this.companyName = companyName;
             this.valid = valid;
+            this.language = language;
         }
     }
 }

@@ -33,6 +33,7 @@ public class CompanyService {
                 .name(request.getName())
                 .token(token)
                 .isActive(true)
+                .language(request.getLanguage() != null ? request.getLanguage() : "en")
                 .expiresAt(LocalDateTime.now().plusDays(days))
                 .createdAt(LocalDateTime.now())
                 .visitCount(0)
@@ -95,6 +96,7 @@ public class CompanyService {
         response.setExpiresAt(company.getExpiresAt());
         response.setCreatedAt(company.getCreatedAt());
         response.setVisitCount(company.getVisitCount());
+        response.setLanguage(company.getLanguage());
         return response;
     }
 }
