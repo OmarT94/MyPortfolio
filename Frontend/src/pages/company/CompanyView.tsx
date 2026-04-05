@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PageSpinner } from '../../components/ui'
+import {CompanyHeaderSkeleton} from '../../components/ui'
 import { useProfileStore } from '../../store'
 import { CompanyHeader } from './CompanyHeader'
 import { CompanyTabs }   from './CompanyTabs'
+
 
 // Navbar بسيط خاص بالشركة — بدون أي أزرار Admin
 const CompanyNavbar = () => (
@@ -27,7 +28,14 @@ export const CompanyView = () => {
         fetchCompany()
     }, [navigate, fetchCompany])
 
-    if (isLoading || !companyProfile) return <PageSpinner />
+    if (isLoading || !companyProfile) return (
+        <div className="min-h-screen bg-slate-950">
+            <CompanyNavbar />
+            <main className="pt-16">
+                <CompanyHeaderSkeleton />
+            </main>
+        </div>
+    )
 
     return (
         <div className="min-h-screen bg-slate-950">
