@@ -14,7 +14,8 @@ interface CompanyHeaderProps {
 
 export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
   const { t } = useT()
-  const cvFullUrl = profile.cvUrl ? `http://localhost:3011${profile.cvUrl}` : null
+    const cvFullUrl = profile.cvUrl ? `${import.meta.env.VITE_FRONTEND_URL}${profile.cvUrl}` : null
+
 
   return (
       <div className="bg-slate-900 border-b border-slate-800">
