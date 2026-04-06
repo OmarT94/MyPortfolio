@@ -10,6 +10,7 @@ Frontend/dist/
 Frontend/build/
 Frontend/.env
 Frontend/.env.local
+!Frontend/package-lock.json
 
 # ─── IntelliJ ───────────────────────────────────
 .idea/
@@ -22,3 +23,5 @@ Thumbs.db
 
 # ─── uploads (صور الشخصية لا ترفعه) ───────────
 Backend/uploads/
+
+─────────────────────────────────────────
