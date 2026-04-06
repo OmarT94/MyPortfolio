@@ -20,17 +20,21 @@ api.interceptors.request.use((config) => {
 export const authApi = {
   adminLogin: async (data: LoginRequest): Promise<LoginResponse> => {
     const res = await api.post('/auth/admin/login', data)
+
+    if (res.data.token) {
+      localStorage.setItem('MyPortfolio_token', res.data.token)
+    }
+
     return res.data
   },
 
-
   companyLogin: async (data: CompanyTokenRequest): Promise<CompanyTokenResponse> => {
-    const res = await fetch(`${BASE_URL}/auth/company/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-    if (!res.ok) throw new Error('Login failed')
-    return res.json()
-  },
+    const res = await api.post('/auth/company/login', data)
+
+    if (res.data.token) {
+      localStorage.setItem('MyPortfolio_token', res.data.token)
+    }
+
+    return res.data
+  }
 }

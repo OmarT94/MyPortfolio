@@ -19,13 +19,10 @@ export const AdminLogin = () => {
     setLoading(true)
     try {
       const res = await authApi.adminLogin(form)
-      console.log('Response:', res)        // ← أضف هذا
-      console.log('Token:', res.token)     // ← وهذا
       setAdminAuth(res.token)
-      console.log('Auth set!')             // ← وهذا
       navigate('/admin/dashboard', { replace: true })
     } catch (e) {
-      console.log('Error:', e)             // ← وهذا
+      console.log('Error:', e)
       setError('بيانات الدخول غير صحيحة')
     } finally {
       setLoading(false)
