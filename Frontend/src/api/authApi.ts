@@ -19,14 +19,10 @@ api.interceptors.request.use((config) => {
 
 export const authApi = {
   adminLogin: async (data: LoginRequest): Promise<LoginResponse> => {
-    const res = await fetch(`${BASE_URL}/auth/admin/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-    if (!res.ok) throw new Error('Login failed')
-    return res.json()
+    const res = await api.post('/auth/admin/login', data)
+    return res.data
   },
+
 
   companyLogin: async (data: CompanyTokenRequest): Promise<CompanyTokenResponse> => {
     const res = await fetch(`${BASE_URL}/auth/company/login`, {
