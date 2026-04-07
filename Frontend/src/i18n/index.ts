@@ -2,7 +2,7 @@ import ar from './ar.json'
 import en from './en.json'
 import de from './de.json'
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type Language = 'ar' | 'en' | 'de'
 
@@ -25,7 +25,10 @@ export const useI18nStore = create<I18nStore>()(
         set({ language })
       },
     }),
-    { name: 'i18n-storage' }
+      {
+        name: 'i18n-storage',
+        storage: createJSONStorage(() => sessionStorage),
+      }
   )
 )
 
@@ -53,7 +56,7 @@ export const useT = () => {
 
 // ─── تطبيق اتجاه الصفحة عند التحميل ─────────────────────────────────────────
 export const initI18n = () => {
-  const stored = localStorage.getItem('i18n-storage')
+  const stored = sessionStorage.getItem('i18n-storage')
   if (stored) {
     const { state } = JSON.parse(stored)
     document.documentElement.dir = state.language === 'ar' ? 'rtl' : 'ltr'
