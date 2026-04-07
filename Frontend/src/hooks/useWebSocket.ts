@@ -20,7 +20,7 @@ export const useWebSocket = () => {
 
     const client = new Client({
       webSocketFactory: () => {
-        return new SockJS('/ws')
+        return new SockJS(`${import.meta.env.VITE_BACKEND_URL}/ws`)
       },
 
       onConnect: () => {
