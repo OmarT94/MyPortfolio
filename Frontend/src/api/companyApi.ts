@@ -1,6 +1,6 @@
 import type { Company, CreateCompanyRequest, UpdateStatusRequest, TokenValidResponse } from '../types'
 
-const BASE = 'http://localhost:8080/api'
+const BASE = `${import.meta.env.VITE_BACKEND_URL}/api`
 
 const getToken = () => {
   const raw = localStorage.getItem('auth-storage')
