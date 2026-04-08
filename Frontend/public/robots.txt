@@ -1,0 +1,11 @@
+# ─── يسمح لـ Google وكل محركات البحث بفهرسة الموقع ──────────────────
+User-agent: *
+Allow: /
+
+# ─── يمنع فهرسة صفحات Admin و Company (سرية) ────────────────────────
+Disallow: /admin/
+Disallow: /company/
+Disallow: /view/
+
+# ─── رابط الـ Sitemap لمساعدة Google على إيجاد الصفحات ───────────────
+Sitemap: https://www.omartamr.com/sitemap.xml
