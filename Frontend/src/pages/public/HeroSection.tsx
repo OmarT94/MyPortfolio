@@ -38,7 +38,7 @@ export const HeroSection = ({ profile }: HeroSectionProps) => {
                 >
                     {profile.photoUrl ? (
                         <img src={profile.photoUrl} alt={profile.fullName}
-                             className="w-32 h-32 rounded-full object-cover ring-4 ring-primary-500/30 shadow-2xl shadow-primary-500/20" />
+                             className="w-32 h-32 rounded-full object-cover object-[center_25%] ring-4 ring-primary-500/30 shadow-2xl shadow-primary-500/20" />
                     ) : (
                         <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center ring-4 ring-primary-500/30">
               <span className="text-4xl font-bold text-white">

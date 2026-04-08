@@ -24,7 +24,7 @@ export const Navbar = () => {
                     onClick={() => navigate('/')}
                     onDoubleClick={() => navigate('/admin/login')}
                 >
-        {'<Portfolio />'}
+        {'Omar Tamr'}
       </span>
 
                 <div className="flex items-center gap-3">

@@ -41,7 +41,7 @@ export const AboutSection = ({ profile }: AboutSectionProps) => {
                         <div className="flex justify-center">
                             {profile.photoUrl ? (
                                 <img src={profile.photoUrl} alt={profile.fullName}
-                                     className="w-64 h-64 rounded-2xl object-cover shadow-2xl ring-1 ring-slate-700" />
+                                     className="w-64 h-64 rounded-2xl object-cover object-[center_25%] shadow-2xl ring-1 ring-slate-700" />
                             ) : (
                                 <div className="w-64 h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center ring-1 ring-slate-700">
                                     <User size={64} className="text-slate-600" />

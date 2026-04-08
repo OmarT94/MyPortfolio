@@ -26,7 +26,7 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
                     {/* Photo */}
                     {profile.photoUrl ? (
                         <img src={profile.photoUrl} alt={profile.fullName}
-                             className="w-28 h-28 rounded-2xl object-cover ring-2 ring-primary-500/30 shadow-xl shrink-0" />
+                             className="w-28 h-28 rounded-2xl object-cover object-[center_25%] ring-2 ring-primary-500/30 shadow-xl shrink-0" />
                     ) : (
                         <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center shrink-0">
               <span className="text-3xl font-bold text-white">
