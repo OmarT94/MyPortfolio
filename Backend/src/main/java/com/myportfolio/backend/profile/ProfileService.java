@@ -1,22 +1,21 @@
 package com.myportfolio.backend.profile;
 
-
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 
     private final ProfileRepo profileRepo;
+    private final Cloudinary cloudinary; // ← أضف هذا
 
     // ─── جلب البيانات العامة (للزوار) ────────────────────────────────────────
     public ProfileDto.PublicResponse getPublicProfile() {
@@ -69,18 +68,36 @@ public class ProfileService {
         return getCompanyProfile();
     }
 
-    // ─── رفع الصورة الشخصية ───────────────────────────────────────────────────
+    // ─── رفع الصورة الشخصية → Cloudinary ────────────────────────────────────
     public String uploadPhoto(MultipartFile file) throws IOException {
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path uploadPath = Paths.get("uploads/");
-        Files.createDirectories(uploadPath);
-        Files.copy(file.getInputStream(), uploadPath.resolve(filename));
-
-        String photoUrl = "/uploads/" + filename;
+        Map uploadResult = cloudinary.uploader().upload(
+                file.getBytes(),
+                ObjectUtils.asMap(
+                        "folder", "portfolio/photos",
+                        "resource_type", "image"
+                )
+        );
+        String photoUrl = (String) uploadResult.get("secure_url");
         Profile profile = getOrCreateProfile();
         profile.setPhotoUrl(photoUrl);
         profileRepo.save(profile);
         return photoUrl;
+    }
+
+    // ─── رفع CV → Cloudinary ─────────────────────────────────────────────────
+    public String uploadCv(MultipartFile file) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(
+                file.getBytes(),
+                ObjectUtils.asMap(
+                        "folder", "portfolio/cv",
+                        "resource_type", "raw"  // ← لملفات PDF
+                )
+        );
+        String cvUrl = (String) uploadResult.get("secure_url");
+        Profile profile = getOrCreateProfile();
+        profile.setCvUrl(cvUrl);
+        profileRepo.save(profile);
+        return cvUrl;
     }
 
     // ─── Helper ───────────────────────────────────────────────────────────────
@@ -90,17 +107,5 @@ public class ProfileService {
             return profileRepo.save(Profile.builder().build());
         }
         return profiles.get(0);
-    }
-
-    public String uploadCv(MultipartFile file) throws IOException {
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path uploadPath = Paths.get("uploads/");
-        Files.createDirectories(uploadPath);
-        Files.copy(file.getInputStream(), uploadPath.resolve(filename));
-        String cvUrl = "/uploads/" + filename;
-        Profile profile = getOrCreateProfile();
-        profile.setCvUrl(cvUrl);
-        profileRepo.save(profile);
-        return cvUrl;
     }
 }
