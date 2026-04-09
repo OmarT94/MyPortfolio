@@ -1,6 +1,6 @@
 import { User } from 'lucide-react'
 import type { PublicProfile } from '../../types'
-import { useT } from '../../i18n'
+import { useT, useI18nStore } from '../../i18n'
 import { AnimatedSection } from '../../components/ui/AnimatedSection'
 
 interface AboutSectionProps {
@@ -9,6 +9,20 @@ interface AboutSectionProps {
 
 export const AboutSection = ({ profile }: AboutSectionProps) => {
     const { t } = useT()
+    const { language } = useI18nStore()
+
+    // ─── اختر البيانات حسب اللغة ──────────────────────────────────────
+    const fullName = (language === 'ar' ? profile.fullName_ar :
+        language === 'en' ? profile.fullName_en :
+            profile.fullName_de) || profile.fullName
+
+    const bio = (language === 'ar' ? profile.bio_ar :
+        language === 'en' ? profile.bio_en :
+            profile.bio_de) || profile.bio
+
+    const location = (language === 'ar' ? profile.location_ar :
+        language === 'en' ? profile.location_en :
+            profile.location_de) || profile.location
 
     return (
         <section id="about" className="py-24 px-4">
@@ -28,10 +42,10 @@ export const AboutSection = ({ profile }: AboutSectionProps) => {
 
                     <AnimatedSection direction="left" delay={0.2}>
                         <div className="space-y-4 text-slate-400 leading-relaxed">
-                            <p>{profile.bio}</p>
+                            <p>{bio}</p>
                             <div className="pt-4 space-y-2">
-                                <InfoRow label={t('about.name')}     value={profile.fullName} />
-                                <InfoRow label={t('about.location')} value={profile.location} />
+                                <InfoRow label={t('about.name')}     value={fullName} />
+                                <InfoRow label={t('about.location')} value={location} />
                                 <InfoRow label={t('about.email')}    value={profile.email} />
                             </div>
                         </div>
@@ -40,7 +54,7 @@ export const AboutSection = ({ profile }: AboutSectionProps) => {
                     <AnimatedSection direction="right" delay={0.3}>
                         <div className="flex justify-center">
                             {profile.photoUrl ? (
-                                <img src={profile.photoUrl} alt={profile.fullName}
+                                <img src={profile.photoUrl} alt={fullName}
                                      className="w-64 h-64 rounded-2xl object-cover object-[center_25%] shadow-2xl ring-1 ring-slate-700" />
                             ) : (
                                 <div className="w-64 h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center ring-1 ring-slate-700">

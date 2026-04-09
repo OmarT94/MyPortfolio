@@ -16,6 +16,24 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
     const { t } = useT()
     const { language } = useI18nStore()
     const isRTL = language === 'ar'
+
+    // ───  البيانات حسب اللغة ──────────────────────────────────────
+    const fullName = (language === 'ar' ? profile.fullName_ar :
+        language === 'en' ? profile.fullName_en :
+            profile.fullName_de) || profile.fullName
+
+    const title = (language === 'ar' ? profile.title_ar :
+        language === 'en' ? profile.title_en :
+            profile.title_de) || profile.title
+
+    const bio = (language === 'ar' ? profile.bio_ar :
+        language === 'en' ? profile.bio_en :
+            profile.bio_de) || profile.bio
+
+    const location = (language === 'ar' ? profile.location_ar :
+        language === 'en' ? profile.location_en :
+            profile.location_de) || profile.location
+
     const cvFullUrl = profile.cvUrl || null
     const cvDownloadUrl = cvFullUrl ?
         cvFullUrl.replace('/upload/', '/upload/fl_attachment/') : null
@@ -26,12 +44,12 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
 
                     {/* Photo */}
                     {profile.photoUrl ? (
-                        <img src={profile.photoUrl} alt={profile.fullName}
+                        <img src={profile.photoUrl} alt={fullName}
                              className="w-28 h-28 rounded-2xl object-cover object-[center_25%] ring-2 ring-primary-500/30 shadow-xl shrink-0" />
                     ) : (
                         <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center shrink-0">
               <span className="text-3xl font-bold text-white">
-                {profile.fullName?.charAt(0)}
+                {fullName?.charAt(0)}
               </span>
                         </div>
                     )}
@@ -39,17 +57,17 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
                     {/* Info */}
                     <div className={`flex-1 text-center space-y-3 ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-100">{profile.fullName}</h1>
-                            <p className="text-primary-400 font-medium mt-1">{profile.title}</p>
+                            <h1 className="text-3xl font-bold text-slate-100">{fullName}</h1>
+                            <p className="text-primary-400 font-medium mt-1">{title}</p>
                         </div>
 
-                        <p className="text-slate-400 text-sm leading-relaxed max-w-xl">{profile.bio}</p>
+                        <p className="text-slate-400 text-sm leading-relaxed max-w-xl">{bio}</p>
 
                         {/* Contact row */}
                         <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-slate-400">
-                            {profile.location && (
+                            {location && (
                                 <span className="flex items-center gap-1.5">
-                  <MapPin size={14} className="text-primary-400" /> {profile.location}
+                  <MapPin size={14} className="text-primary-400" /> {location}
                 </span>
                             )}
                             {profile.email && (
