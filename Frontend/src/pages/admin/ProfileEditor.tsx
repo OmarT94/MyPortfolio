@@ -14,7 +14,14 @@ export const ProfileEditor = () => {
   const [form, setForm] = useState({
     fullName: '', title: '', bio: '', email: '',
     phone: '', location: '', githubUrl: '', linkedinUrl: '', cvUrl: '',
+    // ─── AR ───────────────────────────────────────────────────────────
+    fullName_ar: '', title_ar: '', bio_ar: '', location_ar: '',
+    // ─── EN ───────────────────────────────────────────────────────────
+    fullName_en: '', title_en: '', bio_en: '', location_en: '',
+    // ─── DE ───────────────────────────────────────────────────────────
+    fullName_de: '', title_de: '', bio_de: '', location_de: '',
   })
+
   const [projects,     setProjects]     = useState<Project[]>([])
   const [certificates, setCertificates] = useState<Certificate[]>([])
   const [skills,       setSkills]       = useState<Skill[]>([])
@@ -39,6 +46,21 @@ export const ProfileEditor = () => {
       githubUrl:   companyProfile.githubUrl   ?? '',
       linkedinUrl: companyProfile.linkedinUrl ?? '',
       cvUrl:       companyProfile.cvUrl       ?? '',
+
+      fullName_ar: companyProfile.fullName_ar ?? '',
+      title_ar:    companyProfile.title_ar    ?? '',
+      bio_ar:      companyProfile.bio_ar      ?? '',
+      location_ar: companyProfile.location_ar ?? '',
+
+      fullName_en: companyProfile.fullName_en ?? '',
+      title_en:    companyProfile.title_en    ?? '',
+      bio_en:      companyProfile.bio_en      ?? '',
+      location_en: companyProfile.location_en ?? '',
+
+      fullName_de: companyProfile.fullName_de ?? '',
+      title_de:    companyProfile.title_de    ?? '',
+      bio_de:      companyProfile.bio_de      ?? '',
+      location_de: companyProfile.location_de ?? '',
     })
     setProjects(companyProfile.projects     ?? [])
     setCertificates(companyProfile.certificates ?? [])
@@ -167,6 +189,83 @@ export const ProfileEditor = () => {
             placeholder="اكتب نبذة مختصرة عنك..."
             className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
           />
+        </div>
+      </Card>
+
+      {/* Multilingual Info */}
+      <Card>
+        <CardTitle className="mb-4">المعلومات بثلاث لغات</CardTitle>
+
+        {/* العربية */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-emerald-400 mb-3">🇸🇦 العربية</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input label="الاسم" value={form.fullName_ar}
+                   onChange={e => setForm({...form, fullName_ar: e.target.value})}
+                   placeholder="عمر تمر" />
+            <Input label="المسمى الوظيفي" value={form.title_ar}
+                   onChange={e => setForm({...form, title_ar: e.target.value})}
+                   placeholder="مطور برمجيات" />
+            <Input label="الموقع" value={form.location_ar}
+                   onChange={e => setForm({...form, location_ar: e.target.value})}
+                   placeholder="برلين، ألمانيا" />
+          </div>
+          <div className="mt-3">
+            <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
+            <textarea rows={2} value={form.bio_ar}
+                      onChange={e => setForm({...form, bio_ar: e.target.value})}
+                      placeholder="نبذة مختصرة بالعربية..."
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+            />
+          </div>
+        </div>
+
+        {/* الإنجليزية */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-blue-400 mb-3">🇬🇧 English</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input label="Full Name" value={form.fullName_en}
+                   onChange={e => setForm({...form, fullName_en: e.target.value})}
+                   placeholder="Omar Tamr" />
+            <Input label="Job Title" value={form.title_en}
+                   onChange={e => setForm({...form, title_en: e.target.value})}
+                   placeholder="Full Stack Developer" />
+            <Input label="Location" value={form.location_en}
+                   onChange={e => setForm({...form, location_en: e.target.value})}
+                   placeholder="Berlin, Germany" />
+          </div>
+          <div className="mt-3">
+            <label className="text-sm font-medium text-slate-300 block mb-1.5">Bio</label>
+            <textarea rows={2} value={form.bio_en}
+                      onChange={e => setForm({...form, bio_en: e.target.value})}
+                      placeholder="Short bio in English..."
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+            />
+          </div>
+        </div>
+
+        {/* الألمانية */}
+        <div>
+          <h3 className="text-sm font-semibold text-amber-400 mb-3">🇩🇪 Deutsch</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input label="Vollständiger Name" value={form.fullName_de}
+                   onChange={e => setForm({...form, fullName_de: e.target.value})}
+                   placeholder="Omar Tamr" />
+            <Input label="Berufsbezeichnung" value={form.title_de}
+                   onChange={e => setForm({...form, title_de: e.target.value})}
+                   placeholder="Full Stack Entwickler" />
+            <Input label="Standort" value={form.location_de}
+                   onChange={e => setForm({...form, location_de: e.target.value})}
+                   placeholder="Berlin, Deutschland" />
+          </div>
+          <div className="mt-3">
+            <label className="text-sm font-medium text-slate-300 block mb-1.5">Biografie</label>
+            <textarea rows={2} value={form.bio_de}
+                      onChange={e => setForm({...form, bio_de: e.target.value})}
+                      placeholder="Kurze Biografie auf Deutsch..."
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+            />
+          </div>
         </div>
       </Card>
 
