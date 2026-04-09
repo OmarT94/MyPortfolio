@@ -27,6 +27,25 @@ public class Profile {
     private String email;
     private String location;
 
+    // ─── المعلومات بثلاث لغات ─────────────────────────────────────────────────
+// العربية
+    private String fullName_ar;
+    private String title_ar;
+    private String bio_ar;
+    private String location_ar;
+
+    // الإنجليزية
+    private String fullName_en;
+    private String title_en;
+    private String bio_en;
+    private String location_en;
+
+    // الألمانية
+    private String fullName_de;
+    private String title_de;
+    private String bio_de;
+    private String location_de;
+
     // ─── المعلومات الخاصة (الشركات فقط بعد الرابط السري) ────────────────────
     private String cvUrl;           // رابط تحميل الـ CV
     private List<Project> projects;

@@ -15,6 +15,24 @@ public class ProfileDto {
         private String photoUrl;
         private String email;
         private String location;
+
+        // ─── AR ───────────────────────────────────────────────────────────────────
+        private String fullName_ar;
+        private String title_ar;
+        private String bio_ar;
+        private String location_ar;
+
+        // ─── EN ───────────────────────────────────────────────────────────────────
+        private String fullName_en;
+        private String title_en;
+        private String bio_en;
+        private String location_en;
+
+        // ─── DE ───────────────────────────────────────────────────────────────────
+        private String fullName_de;
+        private String title_de;
+        private String bio_de;
+        private String location_de;
     }
 
     // ─── Response: للشركات (بيانات كاملة) ────────────────────────────────────
@@ -27,6 +45,25 @@ public class ProfileDto {
         private String email;
         private String phone;
         private String location;
+
+        // ─── AR ───────────────────────────────────────────────────────────────────
+        private String fullName_ar;
+        private String title_ar;
+        private String bio_ar;
+        private String location_ar;
+
+        // ─── EN ───────────────────────────────────────────────────────────────────
+        private String fullName_en;
+        private String title_en;
+        private String bio_en;
+        private String location_en;
+
+        // ─── DE ───────────────────────────────────────────────────────────────────
+        private String fullName_de;
+        private String title_de;
+        private String bio_de;
+        private String location_de;
+
         private String cvUrl;
         private String githubUrl;
         private String linkedinUrl;
@@ -44,6 +81,25 @@ public class ProfileDto {
         private String email;
         private String phone;
         private String location;
+
+        // ─── AR ───────────────────────────────────────────────────────────────────
+        private String fullName_ar;
+        private String title_ar;
+        private String bio_ar;
+        private String location_ar;
+
+        // ─── EN ───────────────────────────────────────────────────────────────────
+        private String fullName_en;
+        private String title_en;
+        private String bio_en;
+        private String location_en;
+
+        // ─── DE ───────────────────────────────────────────────────────────────────
+        private String fullName_de;
+        private String title_de;
+        private String bio_de;
+        private String location_de;
+
         private String githubUrl;
         private String linkedinUrl;
         private List<Profile.Project> projects;
