@@ -85,6 +85,24 @@ export interface PublicProfile {
     photoUrl?: string
     email: string
     location: string
+
+    // ─── AR ───────────────────────────────────────────────────────────────
+    fullName_ar?: string
+    title_ar?: string
+    bio_ar?: string
+    location_ar?: string
+
+    // ─── EN ───────────────────────────────────────────────────────────────
+    fullName_en?: string
+    title_en?: string
+    bio_en?: string
+    location_en?: string
+
+    // ─── DE ───────────────────────────────────────────────────────────────
+    fullName_de?: string
+    title_de?: string
+    bio_de?: string
+    location_de?: string
 }
 
 export interface CompanyProfile extends PublicProfile {
@@ -109,6 +127,24 @@ export interface UpdateProfileRequest {
     projects: Project[]
     certificates: Certificate[]
     skills: Skill[]
+
+    // ─── AR ───────────────────────────────────────────────────────────────
+    fullName_ar?: string
+    title_ar?: string
+    bio_ar?: string
+    location_ar?: string
+
+    // ─── EN ───────────────────────────────────────────────────────────────
+    fullName_en?: string
+    title_en?: string
+    bio_en?: string
+    location_en?: string
+
+    // ─── DE ───────────────────────────────────────────────────────────────
+    fullName_de?: string
+    title_de?: string
+    bio_de?: string
+    location_de?: string
 }
 
 // ─── Visit ────────────────────────────────────────────────────────────────────
