@@ -4,10 +4,11 @@ import { Layout } from '../../components/layout'
 import { StatsCards } from './StatsCards'
 import { CompanyTable } from './CompanyTable'
 import { VisitsTable } from './VisitsTable'
-import { LayoutDashboard, UserCog } from 'lucide-react'
+import { LayoutDashboard, UserCog, Briefcase } from 'lucide-react'
 import { ProfileEditor } from './ProfileEditor'
 import { useWebSocket } from '../../hooks/useWebSocket'
 import { useT } from '../../i18n'
+import { JobApplicationsTab } from './JobApplicationsTab'
 
 export const AdminDashboard = () => {
   const token       = useAuthStore((state) => state.token)
@@ -49,6 +50,7 @@ export const AdminDashboard = () => {
                 // ✅ بعد — بعد إضافة const { t } = useT()
                 { id: 'dashboard', label: t('admin.dashboard'),   icon: LayoutDashboard },
                 { id: 'profile',   label: t('admin.editProfile'), icon: UserCog         },
+                { id: 'bewerbungen', label: 'Bewerbungen', icon: Briefcase }
               ].map(({ id, label, icon: Icon }) => (
                   <button key={id} onClick={() => setActiveTab(id)}
                           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
@@ -72,6 +74,7 @@ export const AdminDashboard = () => {
 
           {/* Profile Tab */}
           {activeTab === 'profile' && <ProfileEditor />}
+          {activeTab === 'bewerbungen' && <JobApplicationsTab />}
 
         </div>
       </Layout>
