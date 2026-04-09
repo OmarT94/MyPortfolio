@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Plus, Pencil, Trash2, FileDown, ChevronDown } from 'lucide-react'
+import { Plus, Pencil, Trash2, FileDown, Cloud, ChevronDown } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { Button, EmptyState, Spinner } from '../../components/ui'
 import { useJobApplicationStore } from '../../store/jobApplicationStore'
@@ -9,15 +9,15 @@ import type { JobApplication, ApplicationStatus } from '../../types'
 
 export const JobApplicationsTab = () => {
   const {
-    applications, isLoading, error,
-    fetchAll, create, update, updateStatus, remove,
-    clearError,
+    applications, isLoading, isExporting, error, pdfUrl,
+    fetchAll, create, update, updateStatus, remove, exportPdf,
+    clearError, clearPdfUrl,
   } = useJobApplicationStore()
 
   const [showForm, setShowForm]     = useState(false)
   const [editItem, setEditItem]     = useState<JobApplication | null>(null)
   const [openStatus, setOpenStatus] = useState<string | null>(null)
-  const [pdfLoading, setPdfLoading] = useState(false)  // ← hinzugefügt
+  const [pdfLoading, setPdfLoading] = useState(false)
 
   useEffect(() => { fetchAll() }, [fetchAll])
 
@@ -25,7 +25,15 @@ export const JobApplicationsTab = () => {
     if (error) { toast.error(error); clearError() }
   }, [error, clearError])
 
-  // ─── PDF mit Auth-Token fetchen → als Blob im Browser öffnen ─────────────
+  // ─── Cloudinary URL → in neuem Tab öffnen ─────────────────────────────────
+  useEffect(() => {
+    if (pdfUrl) {
+      toast.success('PDF in Cloudinary gespeichert!')
+      clearPdfUrl()
+    }
+  }, [pdfUrl, clearPdfUrl])
+
+  // ─── PDF direkt im Browser öffnen (Blob + Auth Token) ────────────────────
   const handleOpenPdf = async () => {
     setPdfLoading(true)
     try {
@@ -38,7 +46,6 @@ export const JobApplicationsTab = () => {
           { headers: { 'Authorization': `Bearer ${token}` } }
       )
 
-      if (!response.ok) throw new Error('Fehler')
 
       const blob = await response.blob()
       const url  = URL.createObjectURL(blob)
@@ -91,10 +98,27 @@ export const JobApplicationsTab = () => {
             <p className="text-slate-500 text-sm mt-0.5">Verwalte deine Jobbewerbungen</p>
           </div>
           <div className="flex gap-2">
-            {/* ← onClick auf handleOpenPdf geändert */}
-            <Button variant="secondary" size="sm" onClick={handleOpenPdf} isLoading={pdfLoading}>
+
+            {/* ─── PDF direkt öffnen ─────────────────────────────────────────── */}
+            <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleOpenPdf}
+                isLoading={pdfLoading}
+            >
               <FileDown size={15} /> PDF öffnen
             </Button>
+
+            {/* ─── PDF zu Cloudinary exportieren + archivieren ──────────────── */}
+            <Button
+                variant="secondary"
+                size="sm"
+                onClick={exportPdf}
+                isLoading={isExporting}
+            >
+              <Cloud size={15} /> PDF exportieren
+            </Button>
+
             <Button size="sm" onClick={() => setShowForm(true)}>
               <Plus size={15} /> Neue Bewerbung
             </Button>
