@@ -194,3 +194,73 @@ export interface AuthState {
     role: UserRole
     companyName?: string
 }
+
+// ─── JobApplication ───────────────────────────────────────────────────────────
+
+export type ApplicationStatus =
+    | 'AUSSTEHEND'
+    | 'IN_BEARBEITUNG'
+    | 'VORSTELLUNGSGESPRAECH'
+    | 'ANGENOMMEN'
+    | 'ABGELEHNT'
+
+export interface JobApplication {
+    id: string
+    companyName: string
+    jobTitle: string
+    contactPerson?: string
+    applicationDate: string
+    status: ApplicationStatus
+    statusLabel: string
+    notes?: string
+    createdAt: string
+}
+
+export interface CreateJobApplicationRequest {
+    companyName: string
+    jobTitle: string
+    contactPerson?: string
+    applicationDate: string
+    status: ApplicationStatus
+    notes?: string
+}
+
+export interface UpdateJobStatusRequest {
+    status: ApplicationStatus
+}
+
+export interface PdfResponse {
+    pdfUrl: string
+    message: string
+}
+
+export const STATUS_CONFIG: Record<
+    ApplicationStatus,
+    { label: string; color: string; bg: string }
+> = {
+    AUSSTEHEND: {
+        label: '⏳ Ausstehend',
+        color: 'text-amber-400',
+        bg:    'bg-amber-500/10 border-amber-500/20',
+    },
+    IN_BEARBEITUNG: {
+        label: '🔄 In Bearbeitung',
+        color: 'text-blue-400',
+        bg:    'bg-blue-500/10 border-blue-500/20',
+    },
+    VORSTELLUNGSGESPRAECH: {
+        label: '📞 Vorstellungsgespräch',
+        color: 'text-purple-400',
+        bg:    'bg-purple-500/10 border-purple-500/20',
+    },
+    ANGENOMMEN: {
+        label: '✅ Angenommen',
+        color: 'text-emerald-400',
+        bg:    'bg-emerald-500/10 border-emerald-500/20',
+    },
+    ABGELEHNT: {
+        label: '❌ Abgelehnt',
+        color: 'text-red-400',
+        bg:    'bg-red-500/10 border-red-500/20',
+    },
+}
