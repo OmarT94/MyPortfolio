@@ -2,9 +2,15 @@ package com.myportfolio.backend.jobapplication;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,187 +24,222 @@ import java.util.stream.Collectors;
 public class JobApplicationService {
 
     private final JobApplicationRepo jobApplicationRepo;
-    private final Cloudinary cloudinary; // ← نفس الـ Cloudinary من ProfileService
+    private final Cloudinary cloudinary;
 
-    // ─── Labels الألمانية لكل حالة ───────────────────────────────────────────
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    // ─── Labels ohne Emojis (PDF-kompatibel) ─────────────────────────────────
     private static final Map<JobApplication.Status, String> STATUS_LABELS = Map.of(
-        JobApplication.Status.AUSSTEHEND,            "⏳ Ausstehend",
-        JobApplication.Status.IN_BEARBEITUNG,        "🔄 In Bearbeitung",
-        JobApplication.Status.VORSTELLUNGSGESPRAECH, "📞 Vorstellungsgespräch",
-        JobApplication.Status.ANGENOMMEN,            "✅ Angenommen",
-        JobApplication.Status.ABGELEHNT,             "❌ Abgelehnt"
+            JobApplication.Status.AUSSTEHEND,            "Ausstehend",
+            JobApplication.Status.IN_BEARBEITUNG,        "In Bearbeitung",
+            JobApplication.Status.VORSTELLUNGSGESPRAECH, "Vorstellungsgespraech",
+            JobApplication.Status.ANGENOMMEN,            "Angenommen",
+            JobApplication.Status.ABGELEHNT,             "Abgelehnt"
     );
 
-    // ─── إنشاء طلب جديد ──────────────────────────────────────────────────────
-    public JobApplicationDto.Response create(JobApplicationDto.Request request) {
+    // ─── Farben pro Status ────────────────────────────────────────────────────
+    private static final Map<JobApplication.Status, Color> STATUS_COLORS = Map.of(
+            JobApplication.Status.AUSSTEHEND,            new Color(245, 158, 11),
+            JobApplication.Status.IN_BEARBEITUNG,        new Color(59, 130, 246),
+            JobApplication.Status.VORSTELLUNGSGESPRAECH, new Color(139, 92, 246),
+            JobApplication.Status.ANGENOMMEN,            new Color(16, 185, 129),
+            JobApplication.Status.ABGELEHNT,             new Color(239, 68, 68)
+    );
 
-        // منع التكرار — نفس الشركة + نفس الوظيفة
+    // ─── Create ───────────────────────────────────────────────────────────────
+    public JobApplicationDto.Response create(JobApplicationDto.Request request) {
         boolean exists = jobApplicationRepo
-            .existsByCompanyNameIgnoreCaseAndJobTitleIgnoreCase(
-                request.getCompanyName(), request.getJobTitle());
+                .existsByCompanyNameIgnoreCaseAndJobTitleIgnoreCase(
+                        request.getCompanyName(), request.getJobTitle());
 
         if (exists) {
             throw new RuntimeException(
-                "⚠️ Sie haben sich bereits bei " + request.getCompanyName() +
-                " für die Stelle '" + request.getJobTitle() + "' beworben!"
+                    "Sie haben sich bereits bei " + request.getCompanyName() +
+                            " fuer die Stelle '" + request.getJobTitle() + "' beworben!"
             );
         }
 
         JobApplication application = JobApplication.builder()
-            .companyName(request.getCompanyName())
-            .jobTitle(request.getJobTitle())
-            .contactPerson(request.getContactPerson())
-            .applicationDate(request.getApplicationDate() != null
-                ? request.getApplicationDate() : LocalDate.now())
-            .status(request.getStatus() != null
-                ? request.getStatus() : JobApplication.Status.AUSSTEHEND)
-            .notes(request.getNotes())
-            .createdAt(LocalDateTime.now())
-            .build();
+                .companyName(request.getCompanyName())
+                .jobTitle(request.getJobTitle())
+                .contactPerson(request.getContactPerson())
+                .applicationDate(request.getApplicationDate() != null
+                        ? request.getApplicationDate() : LocalDate.now())
+                .status(request.getStatus() != null
+                        ? request.getStatus() : JobApplication.Status.AUSSTEHEND)
+                .notes(request.getNotes())
+                .createdAt(LocalDateTime.now())
+                .build();
 
         return mapToResponse(jobApplicationRepo.save(application));
     }
 
-    // ─── جلب كل الطلبات ──────────────────────────────────────────────────────
+    // ─── Get All ──────────────────────────────────────────────────────────────
     public List<JobApplicationDto.Response> getAll() {
         return jobApplicationRepo.findAllByOrderByApplicationDateDesc()
-            .stream()
-            .map(this::mapToResponse)
-            .collect(Collectors.toList());
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
-    // ─── تعديل طلب كامل ──────────────────────────────────────────────────────
+    // ─── Update ───────────────────────────────────────────────────────────────
     public JobApplicationDto.Response update(String id, JobApplicationDto.Request request) {
         JobApplication app = jobApplicationRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Bewerbung nicht gefunden"));
-
+                .orElseThrow(() -> new RuntimeException("Bewerbung nicht gefunden"));
         app.setCompanyName(request.getCompanyName());
         app.setJobTitle(request.getJobTitle());
         app.setContactPerson(request.getContactPerson());
         app.setApplicationDate(request.getApplicationDate());
         app.setStatus(request.getStatus());
         app.setNotes(request.getNotes());
-
         return mapToResponse(jobApplicationRepo.save(app));
     }
 
-    // ─── تحديث الحالة فقط ────────────────────────────────────────────────────
+    // ─── Update Status ────────────────────────────────────────────────────────
     public JobApplicationDto.Response updateStatus(String id,
                                                    JobApplicationDto.UpdateStatusRequest request) {
         JobApplication app = jobApplicationRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Bewerbung nicht gefunden"));
-
+                .orElseThrow(() -> new RuntimeException("Bewerbung nicht gefunden"));
         app.setStatus(request.getStatus());
         return mapToResponse(jobApplicationRepo.save(app));
     }
 
-    // ─── حذف طلب ─────────────────────────────────────────────────────────────
+    // ─── Delete ───────────────────────────────────────────────────────────────
     public void delete(String id) {
         jobApplicationRepo.deleteById(id);
     }
 
-    // ─── توليد PDF + رفعه لـ Cloudinary ──────────────────────────────────────
-    public JobApplicationDto.PdfResponse exportToPdf() throws IOException {
+    // ─── Public: für Controller direkt streamen ───────────────────────────────
+    public byte[] generatePdfBytes() throws IOException {
         List<JobApplication> applications =
-            jobApplicationRepo.findAllByOrderByApplicationDateDesc();
+                jobApplicationRepo.findAllByOrderByApplicationDateDesc();
+        return buildPdf(applications);
+    }
 
-        // توليد محتوى الـ PDF كـ HTML بسيط محوّل لـ bytes
-        byte[] pdfBytes = generatePdfBytes(applications);
+    // ─── Export PDF → Cloudinary ──────────────────────────────────────────────
+    public JobApplicationDto.PdfResponse exportToPdf() throws IOException {
+        byte[] pdfBytes = generatePdfBytes();
 
-        // رفع لـ Cloudinary
         Map uploadResult = cloudinary.uploader().upload(
-            pdfBytes,
-            ObjectUtils.asMap(
-                "folder",        "portfolio/job-applications",
-                "resource_type", "raw",
-                "format",        "pdf",
-                "public_id",     "bewerbungen_" + System.currentTimeMillis()
-            )
+                pdfBytes,
+                ObjectUtils.asMap(
+                        "folder",        "portfolio/job-applications",
+                        "resource_type", "raw",
+                        "format",        "pdf",
+                        "access_mode",   "public",
+                        "public_id",     "bewerbungen_" + System.currentTimeMillis()
+                )
         );
 
         String pdfUrl = (String) uploadResult.get("secure_url");
         return new JobApplicationDto.PdfResponse(pdfUrl, "PDF erfolgreich exportiert!");
     }
 
-    // ─── توليد PDF بدون مكتبات خارجية (HTML → bytes) ─────────────────────────
-    private byte[] generatePdfBytes(List<JobApplication> applications) throws IOException {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    // ─── Echtes PDF mit OpenPDF ───────────────────────────────────────────────
+    private byte[] buildPdf(List<JobApplication> applications) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4.rotate(), 36, 36, 50, 36);
 
-        StringBuilder html = new StringBuilder();
-        html.append("<!DOCTYPE html><html><head>")
-            .append("<meta charset='UTF-8'>")
-            .append("<style>")
-            .append("body { font-family: Arial, sans-serif; margin: 40px; direction: ltr; }")
-            .append("h1 { color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 10px; }")
-            .append("table { width: 100%; border-collapse: collapse; margin-top: 20px; }")
-            .append("th { background: #0284c7; color: white; padding: 10px; text-align: left; }")
-            .append("td { padding: 10px; border-bottom: 1px solid #e2e8f0; }")
-            .append("tr:nth-child(even) { background: #f8fafc; }")
-            .append(".status-AUSSTEHEND { color: #f59e0b; }")
-            .append(".status-IN_BEARBEITUNG { color: #3b82f6; }")
-            .append(".status-VORSTELLUNGSGESPRAECH { color: #8b5cf6; }")
-            .append(".status-ANGENOMMEN { color: #10b981; font-weight: bold; }")
-            .append(".status-ABGELEHNT { color: #ef4444; }")
-            .append("</style></head><body>")
-            .append("<h1>📋 Bewerbungsübersicht</h1>")
-            .append("<p>Erstellt am: ")
-            .append(LocalDate.now().format(dateFormatter))
-            .append(" | Gesamt: ").append(applications.size()).append(" Bewerbungen</p>")
-            .append("<table>")
-            .append("<tr>")
-            .append("<th>#</th>")
-            .append("<th>Firma</th>")
-            .append("<th>Stelle</th>")
-            .append("<th>Ansprechpartner</th>")
-            .append("<th>Datum</th>")
-            .append("<th>Status</th>")
-            .append("<th>Notizen</th>")
-            .append("</tr>");
+        try {
+            PdfWriter.getInstance(document, out);
+            document.open();
 
-        int index = 1;
-        for (JobApplication app : applications) {
-            String statusLabel = STATUS_LABELS.getOrDefault(app.getStatus(), "—");
-            String dateStr = app.getApplicationDate() != null
-                ? app.getApplicationDate().format(dateFormatter) : "—";
+            // Fonts
+            Font titleFont  = new Font(Font.HELVETICA, 20, Font.BOLD,   new Color(2, 132, 199));
+            Font metaFont   = new Font(Font.HELVETICA,  9, Font.NORMAL, new Color(100, 116, 139));
+            Font headerFont = new Font(Font.HELVETICA, 10, Font.BOLD,   Color.WHITE);
+            Font normalFont = new Font(Font.HELVETICA,  9, Font.NORMAL, new Color(30, 41, 59));
+            Font boldFont   = new Font(Font.HELVETICA,  9, Font.BOLD,   new Color(30, 41, 59));
 
-            html.append("<tr>")
-                .append("<td>").append(index++).append("</td>")
-                .append("<td><strong>").append(escape(app.getCompanyName())).append("</strong></td>")
-                .append("<td>").append(escape(app.getJobTitle())).append("</td>")
-                .append("<td>").append(escape(app.getContactPerson() != null ? app.getContactPerson() : "—")).append("</td>")
-                .append("<td>").append(dateStr).append("</td>")
-                .append("<td class='status-").append(app.getStatus()).append("'>")
-                    .append(statusLabel).append("</td>")
-                .append("<td>").append(escape(app.getNotes() != null ? app.getNotes() : "—")).append("</td>")
-                .append("</tr>");
+            // Titel
+            Paragraph title = new Paragraph("Bewerbungsuebersicht", titleFont);
+            title.setAlignment(Element.ALIGN_LEFT);
+            title.setSpacingAfter(6);
+            document.add(title);
+
+            // Meta
+            Paragraph meta = new Paragraph(
+                    "Erstellt am: " + LocalDate.now().format(DATE_FMT) +
+                            "    Gesamt: " + applications.size() + " Bewerbungen",
+                    metaFont
+            );
+            meta.setSpacingAfter(14);
+            document.add(meta);
+
+            // Tabelle
+            PdfPTable table = new PdfPTable(7);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{ 3, 14, 18, 14, 10, 16, 25 });
+            table.setSpacingBefore(8);
+
+            // Header
+            Color headerBg = new Color(2, 132, 199);
+            for (String h : new String[]{"#", "Firma", "Stelle", "Ansprechpartner", "Datum", "Status", "Notizen"}) {
+                PdfPCell cell = new PdfPCell(new Phrase(h, headerFont));
+                cell.setBackgroundColor(headerBg);
+                cell.setPadding(9);
+                cell.setBorder(Rectangle.NO_BORDER);
+                table.addCell(cell);
+            }
+
+            // Daten
+            boolean alt = false;
+            int idx = 1;
+            for (JobApplication app : applications) {
+                Color rowBg     = alt ? new Color(241, 245, 249) : Color.WHITE;
+                Color statusClr = STATUS_COLORS.getOrDefault(app.getStatus(), Color.GRAY);
+                String statusLbl = STATUS_LABELS.getOrDefault(app.getStatus(), "—");
+                String dateStr  = app.getApplicationDate() != null
+                        ? app.getApplicationDate().format(DATE_FMT) : "—";
+
+                Object[][] cells = {
+                        { String.valueOf(idx++),  normalFont },
+                        { app.getCompanyName(),   boldFont   },
+                        { app.getJobTitle(),      normalFont },
+                        { app.getContactPerson() != null ? app.getContactPerson() : "—", normalFont },
+                        { dateStr,                normalFont },
+                        { statusLbl,              new Font(Font.HELVETICA, 9, Font.BOLD, statusClr) },
+                        { app.getNotes() != null ? app.getNotes() : "—", metaFont }
+                };
+
+                for (Object[] cellData : cells) {
+                    PdfPCell cell = new PdfPCell(new Phrase((String) cellData[0], (Font) cellData[1]));
+                    cell.setBackgroundColor(rowBg);
+                    cell.setPadding(7);
+                    cell.setBorderColor(new Color(226, 232, 240));
+                    cell.setBorderWidth(0.5f);
+                    table.addCell(cell);
+                }
+                alt = !alt;
+            }
+
+            document.add(table);
+
+            // Footer
+            Paragraph footer = new Paragraph(
+                    "\nStatus: Ausstehend  |  In Bearbeitung  |  Vorstellungsgespraech  |  Angenommen  |  Abgelehnt",
+                    metaFont
+            );
+            footer.setSpacingBefore(10);
+            document.add(footer);
+
+        } finally {
+            document.close();
         }
 
-        html.append("</table></body></html>");
-
-        // تحويل HTML لـ bytes (Cloudinary يقبل HTML كـ raw)
-        return html.toString().getBytes("UTF-8");
+        return out.toByteArray();
     }
 
-    // ─── Helper: تنظيف النص من HTML special chars ─────────────────────────────
-    private String escape(String text) {
-        if (text == null) return "—";
-        return text.replace("&", "&amp;")
-                   .replace("<", "&lt;")
-                   .replace(">", "&gt;");
-    }
-
-    // ─── Helper: تحويل لـ Response ───────────────────────────────────────────
+    // ─── Mapper ───────────────────────────────────────────────────────────────
     private JobApplicationDto.Response mapToResponse(JobApplication app) {
-        JobApplicationDto.Response response = new JobApplicationDto.Response();
-        response.setId(app.getId());
-        response.setCompanyName(app.getCompanyName());
-        response.setJobTitle(app.getJobTitle());
-        response.setContactPerson(app.getContactPerson());
-        response.setApplicationDate(app.getApplicationDate());
-        response.setStatus(app.getStatus());
-        response.setStatusLabel(STATUS_LABELS.getOrDefault(app.getStatus(), "—"));
-        response.setNotes(app.getNotes());
-        response.setCreatedAt(app.getCreatedAt());
-        return response;
+        JobApplicationDto.Response r = new JobApplicationDto.Response();
+        r.setId(app.getId());
+        r.setCompanyName(app.getCompanyName());
+        r.setJobTitle(app.getJobTitle());
+        r.setContactPerson(app.getContactPerson());
+        r.setApplicationDate(app.getApplicationDate());
+        r.setStatus(app.getStatus());
+        r.setStatusLabel(STATUS_LABELS.getOrDefault(app.getStatus(), "—"));
+        r.setNotes(app.getNotes());
+        r.setCreatedAt(app.getCreatedAt());
+        return r;
     }
 }

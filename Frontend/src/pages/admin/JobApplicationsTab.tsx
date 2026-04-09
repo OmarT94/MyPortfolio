@@ -26,7 +26,9 @@ export const JobApplicationsTab = () => {
 
   useEffect(() => {
     if (pdfUrl) {
-      window.open(pdfUrl, '_blank')
+      const handleOpenPdf = () => {
+        window.open(`${backendUrl}/api/admin/job-applications/preview-pdf`, '_blank')
+      }
       toast.success('PDF erfolgreich exportiert!')
       clearPdfUrl()
     }
