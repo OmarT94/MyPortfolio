@@ -18,6 +18,7 @@ export const ContactSection = ({ profile }: ContactSectionProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSending(true)
     try {
       await emailjs.send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -34,6 +35,8 @@ export const ContactSection = ({ profile }: ContactSectionProps) => {
       setTimeout(() => setSent(false), 4000)
     } catch (error) {
       console.error('Error sending email:', error)
+    }finally {
+      setSending(false)  //
     }
   }
 
