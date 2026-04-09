@@ -2,7 +2,7 @@ import { Mail, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Button } from '../../components/ui'
 import type { PublicProfile } from '../../types'
-import { useT } from '../../i18n'
+import { useT, useI18nStore } from '../../i18n'
 
 const GitHubIcon = () => (
     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -22,6 +22,24 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ profile }: HeroSectionProps) => {
     const { t } = useT()
+    const { language } = useI18nStore()
+
+    // ─── اختر البيانات حسب اللغة ──────────────────────────────────────
+    const fullName = (language === 'ar' ? profile.fullName_ar :
+        language === 'en' ? profile.fullName_en :
+            profile.fullName_de) || profile.fullName
+
+    const title = (language === 'ar' ? profile.title_ar :
+        language === 'en' ? profile.title_en :
+            profile.title_de) || profile.title
+
+    const bio = (language === 'ar' ? profile.bio_ar :
+        language === 'en' ? profile.bio_en :
+            profile.bio_de) || profile.bio
+
+    const location = (language === 'ar' ? profile.location_ar :
+        language === 'en' ? profile.location_en :
+            profile.location_de) || profile.location
 
     return (
         <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
@@ -37,13 +55,13 @@ export const HeroSection = ({ profile }: HeroSectionProps) => {
                     className="flex justify-center"
                 >
                     {profile.photoUrl ? (
-                        <img src={profile.photoUrl} alt={profile.fullName}
+                        <img src={profile.photoUrl} alt={fullName}
                              className="w-32 h-32 rounded-full object-cover object-[center_25%] ring-4 ring-primary-500/30 shadow-2xl shadow-primary-500/20" />
                     ) : (
                         <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center ring-4 ring-primary-500/30">
-              <span className="text-4xl font-bold text-white">
-                {profile.fullName?.charAt(0) ?? '?'}
-              </span>
+                            <span className="text-4xl font-bold text-white">
+                                {fullName?.charAt(0) ?? '?'}
+                            </span>
                         </div>
                     )}
                 </motion.div>
@@ -57,9 +75,9 @@ export const HeroSection = ({ profile }: HeroSectionProps) => {
                 >
                     <p className="text-primary-400 font-medium">{t('hero.greeting')}</p>
                     <h1 className="text-5xl md:text-6xl font-bold text-slate-100 tracking-tight">
-                        {profile.fullName}
+                        {fullName}
                     </h1>
-                    <p className="text-xl text-primary-400 font-medium">{profile.title}</p>
+                    <p className="text-xl text-primary-400 font-medium">{title}</p>
                 </motion.div>
 
                 {/* Bio */}
@@ -69,7 +87,7 @@ export const HeroSection = ({ profile }: HeroSectionProps) => {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed"
                 >
-                    {profile.bio}
+                    {bio}
                 </motion.p>
 
                 {/* Meta info */}
@@ -79,11 +97,11 @@ export const HeroSection = ({ profile }: HeroSectionProps) => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="flex items-center justify-center gap-6 text-sm text-slate-500"
                 >
-                    {profile.location && (
+                    {location && (
                         <span className="flex items-center gap-1.5">
-              <MapPin size={14} className="text-primary-400" />
-                            {profile.location}
-            </span>
+                            <MapPin size={14} className="text-primary-400" />
+                            {location}
+                        </span>
                     )}
                     {profile.email && (
                         <a href={`mailto:${profile.email}`}
