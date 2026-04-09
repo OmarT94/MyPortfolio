@@ -16,8 +16,7 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
     const { t } = useT()
     const { language } = useI18nStore()
     const isRTL = language === 'ar'
-    const cvFullUrl = profile.cvUrl ? `${import.meta.env.VITE_FRONTEND_URL}${profile.cvUrl}` : null
-
+    const cvFullUrl = profile.cvUrl || null
     return (
         <div className="bg-slate-900 border-b border-slate-800">
             <div className="max-w-5xl mx-auto px-4 py-10">
