@@ -90,7 +90,9 @@ public class ProfileService {
                 file.getBytes(),
                 ObjectUtils.asMap(
                         "folder", "portfolio/cv",
-                        "resource_type", "raw"  // ← لملفات PDF
+                        "resource_type", "raw",
+                        "format", "pdf",
+                        "type", "upload"
                 )
         );
         String cvUrl = (String) uploadResult.get("secure_url");

@@ -17,6 +17,8 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
     const { language } = useI18nStore()
     const isRTL = language === 'ar'
     const cvFullUrl = profile.cvUrl || null
+    const cvDownloadUrl = cvFullUrl ?
+        cvFullUrl.replace('/upload/', '/upload/fl_attachment/') : null
     return (
         <div className="bg-slate-900 border-b border-slate-800">
             <div className="max-w-5xl mx-auto px-4 py-10">
@@ -69,14 +71,14 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
 
                             {cvFullUrl && (
                                 <button
-                                    onClick={() => window.open(cvFullUrl, '_blank')}
+                                    onClick={() => window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(cvFullUrl)}&embedded=false`, '_blank')}
                                     className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors">
                                     <Eye size={14} /> {t('company.downloadCv')}
                                 </button>
                             )}
 
                             {cvFullUrl && (
-                                <a href={cvFullUrl} download
+                                <a href={cvDownloadUrl ?? cvFullUrl} download
                                    className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg transition-colors">
                                     <Download size={14} /> PDF
                                 </a>
