@@ -3,6 +3,7 @@ import { Mail, Send, MapPin } from 'lucide-react'
 import { Button, Input, Card } from '../../components/ui'
 import type { PublicProfile } from '../../types'
 import { useT } from '../../i18n'
+import { AnimatedSection } from '../../components/ui/AnimatedSection'
 
 interface ContactSectionProps {
   profile: PublicProfile
@@ -26,58 +27,65 @@ export const ContactSection = ({ profile }: ContactSectionProps) => {
       <section id="contact" className="py-24 px-4">
         <div className="max-w-4xl mx-auto">
 
-          <div className="flex items-center gap-3 mb-12">
-            <div className="p-2 bg-primary-500/10 rounded-lg">
-              <Mail size={20} className="text-primary-400" />
+          <AnimatedSection direction="up">
+            <div className="flex items-center gap-3 mb-12">
+              <div className="p-2 bg-primary-500/10 rounded-lg">
+                <Mail size={20} className="text-primary-400" />
+              </div>
+              <h2 className="text-3xl font-bold text-slate-100">{t('contact.title')}</h2>
+              <div className="flex-1 h-px bg-slate-800" />
             </div>
-            <h2 className="text-3xl font-bold text-slate-100">{t('contact.title')}</h2>
-            <div className="flex-1 h-px bg-slate-800" />
-          </div>
+          </AnimatedSection>
 
           <div className="grid md:grid-cols-2 gap-10">
 
-            <div className="space-y-6">
-              <p className="text-slate-400 leading-relaxed">{t('contact.subtitle')}</p>
-              <div className="space-y-4">
-                <ContactInfo icon={<Mail size={16} />}   label={t('contact.email')}    value={profile.email} />
-                <ContactInfo icon={<MapPin size={16} />} label={t('contact.location')} value={profile.location} />
-              </div>
-            </div>
-
-            <Card>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <Input
-                    label={t('contact.name')}
-                    placeholder={t('contact.placeholder.name')}
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    required
-                />
-                <Input
-                    label={t('contact.email')}
-                    type="email"
-                    placeholder={t('contact.placeholder.email')}
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    required
-                />
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-slate-300">{t('contact.message')}</label>
-                  <textarea
-                      rows={4}
-                      placeholder={t('contact.placeholder.message')}
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      required
-                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none transition-colors"
-                  />
+            <AnimatedSection direction="left" delay={0.2}>
+              <div className="space-y-6">
+                <p className="text-slate-400 leading-relaxed">{t('contact.subtitle')}</p>
+                <div className="space-y-4">
+                  <ContactInfo icon={<Mail size={16} />}   label={t('contact.email')}    value={profile.email} />
+                  <ContactInfo icon={<MapPin size={16} />} label={t('contact.location')} value={profile.location} />
                 </div>
-                <Button type="submit" className="w-full" size="lg">
-                  <Send size={16} />
-                  {sent ? `✅ ${t('contact.sent')}` : t('contact.send')}
-                </Button>
-              </form>
-            </Card>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection direction="right" delay={0.3}>
+              <Card>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <Input
+                      label={t('contact.name')}
+                      placeholder={t('contact.placeholder.name')}
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      required
+                  />
+                  <Input
+                      label={t('contact.email')}
+                      type="email"
+                      placeholder={t('contact.placeholder.email')}
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      required
+                  />
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-medium text-slate-300">{t('contact.message')}</label>
+                    <textarea
+                        rows={4}
+                        placeholder={t('contact.placeholder.message')}
+                        value={form.message}
+                        onChange={(e) => setForm({ ...form, message: e.target.value })}
+                        required
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none transition-colors"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" size="lg">
+                    <Send size={16} />
+                    {sent ? `✅ ${t('contact.sent')}` : t('contact.send')}
+                  </Button>
+                </form>
+              </Card>
+            </AnimatedSection>
+
           </div>
         </div>
       </section>
