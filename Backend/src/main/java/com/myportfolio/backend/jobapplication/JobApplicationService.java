@@ -150,7 +150,7 @@ public class JobApplicationService {
             Font boldFont   = new Font(Font.HELVETICA,  9, Font.BOLD,   new Color(30, 41, 59));
 
             // Titel
-            Paragraph title = new Paragraph("Bewerbungsuebersicht", titleFont);
+            Paragraph title = new Paragraph("Bewerbungsübersicht für Omar Tamr", titleFont);
             title.setAlignment(Element.ALIGN_LEFT);
             title.setSpacingAfter(6);
             document.add(title);
@@ -214,11 +214,23 @@ public class JobApplicationService {
             document.add(table);
 
             // Footer
+            // ─── Footer mit Statistiken ───────────────────────────────────────────────
+            long ausstehend    = applications.stream().filter(a -> a.getStatus() == JobApplication.Status.AUSSTEHEND).count();
+            long inBearbeitung = applications.stream().filter(a -> a.getStatus() == JobApplication.Status.IN_BEARBEITUNG).count();
+            long gespraech     = applications.stream().filter(a -> a.getStatus() == JobApplication.Status.VORSTELLUNGSGESPRAECH).count();
+            long angenommen    = applications.stream().filter(a -> a.getStatus() == JobApplication.Status.ANGENOMMEN).count();
+            long abgelehnt     = applications.stream().filter(a -> a.getStatus() == JobApplication.Status.ABGELEHNT).count();
+
             Paragraph footer = new Paragraph(
-                    "\nStatus: Ausstehend  |  In Bearbeitung  |  Vorstellungsgespraech  |  Angenommen  |  Abgelehnt",
+                    "Zusammenfassung:   " +
+                            "Ausstehend: " + ausstehend + "   |   " +
+                            "In Bearbeitung: " + inBearbeitung + "   |   " +
+                            "Vorstellungsgespräch: " + gespraech + "   |   " +
+                            "Angenommen: " + angenommen + "   |   " +
+                            "Abgelehnt: " + abgelehnt,
                     metaFont
             );
-            footer.setSpacingBefore(10);
+            footer.setSpacingBefore(12);
             document.add(footer);
 
         } finally {
