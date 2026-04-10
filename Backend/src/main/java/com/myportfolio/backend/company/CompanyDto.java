@@ -14,6 +14,7 @@ public class CompanyDto {
         private String name;
         private int expiresInDays; // عدد أيام صلاحية الرابط (افتراضي 30 يوم)
         private String language; // اللغة التي تختارها للشركة
+        private String jobTitle;
     }
 
     // ─── Response: بيانات الشركة للـ Admin ────────────────────────────────────
@@ -28,6 +29,7 @@ public class CompanyDto {
         private LocalDateTime createdAt;
         private int visitCount;
         private String language;
+        private String jobTitle;
     }
 
     // ─── Request: تعديل حالة الرابط ──────────────────────────────────────────

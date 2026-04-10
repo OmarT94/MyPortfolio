@@ -34,4 +34,6 @@ public class Company {
     private int visitCount;        // عدد الزيارات الكلي
 
     private String language; // "ar", "en", "de" — افتراضي "en"
+
+    private String jobTitle;
 }
