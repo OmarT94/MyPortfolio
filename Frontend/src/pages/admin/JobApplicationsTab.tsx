@@ -84,10 +84,12 @@ export const JobApplicationsTab = () => {
       new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
   const stats = [
-    { label: 'Gesamt',     value: applications.length,                                                   color: 'text-slate-300'   },
-    { label: 'Ausstehend', value: applications.filter(a => a.status === 'AUSSTEHEND').length,            color: 'text-amber-400'   },
-    { label: 'Gespräch',   value: applications.filter(a => a.status === 'VORSTELLUNGSGESPRAECH').length, color: 'text-purple-400'  },
-    { label: 'Angenommen', value: applications.filter(a => a.status === 'ANGENOMMEN').length,            color: 'text-emerald-400' },
+    { label: 'Gesamt',          value: applications.length,                                                   color: 'text-slate-300'   },
+    { label: 'Ausstehend',      value: applications.filter(a => a.status === 'AUSSTEHEND').length,            color: 'text-amber-400'   },
+    { label: 'In Bearbeitung',  value: applications.filter(a => a.status === 'IN_BEARBEITUNG').length,        color: 'text-blue-400'    },
+    { label: 'Gespräch',        value: applications.filter(a => a.status === 'VORSTELLUNGSGESPRAECH').length, color: 'text-purple-400'  },
+    { label: 'Angenommen',      value: applications.filter(a => a.status === 'ANGENOMMEN').length,            color: 'text-emerald-400' },
+    { label: 'Abgelehnt',       value: applications.filter(a => a.status === 'ABGELEHNT').length,             color: 'text-red-400'     },
   ]
 
   return (
@@ -125,7 +127,7 @@ export const JobApplicationsTab = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
           {stats.map(({ label, value, color }) => (
               <div key={label} className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
                 <p className={`text-2xl font-bold ${color}`}>{value}</p>
