@@ -3,20 +3,15 @@ import { FolderOpen, Award, Code } from 'lucide-react'
 import { ProjectCard, CertificateCard, SkillBar, EmptyState } from '../../components/ui'
 import { StaggerContainer, StaggerItem } from '../../components/ui/AnimatedSection'
 import type { CompanyProfile } from '../../types'
-import { useVisitTracker } from '../../hooks/useVisitTracker'
 import { useT } from '../../i18n'
 
 interface CompanyTabsProps {
   profile: CompanyProfile
+  trackPage: (page: string) => void  // ← neu: von CompanyView übergeben
 }
 
-export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
+export const CompanyTabs = ({ profile, trackPage }: CompanyTabsProps) => {
   const [activeTab, setActiveTab] = useState('projects')
-
-  // ✅ magic-token = der kurze 16-Zeichen Token (nicht der JWT!)
-  const companyToken = sessionStorage.getItem('magic-token')
-  const { trackPage } = useVisitTracker(companyToken)
-
   const { t } = useT()
 
   const TABS = [
@@ -27,7 +22,7 @@ export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
-    trackPage(tabId)
+    trackPage(tabId)  // ← trackt den Tab-Wechsel
   }
 
   const skillsByCategory = profile.skills?.reduce((acc, skill) => {

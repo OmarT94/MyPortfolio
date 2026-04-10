@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {CompanyHeaderSkeleton} from '../../components/ui'
+import { CompanyHeaderSkeleton } from '../../components/ui'
 import { useProfileStore } from '../../store'
+import { useVisitTracker } from '../../hooks/useVisitTracker'  // ← neu
 import { CompanyHeader } from './CompanyHeader'
 import { CompanyTabs }   from './CompanyTabs'
 
-
-// Navbar بسيط خاص بالشركة — بدون أي أزرار Admin
 const CompanyNavbar = () => (
     <header className="fixed top-0 left-0 right-0 z-40 h-16 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/50">
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center">
@@ -19,9 +18,13 @@ export const CompanyView = () => {
     const navigate = useNavigate()
     const { companyProfile, isLoading, fetchCompany } = useProfileStore()
 
+    // ─── useVisitTracker hier definieren → an beide Komponenten übergeben ────
+    const companyToken = sessionStorage.getItem('magic-token')
+    const { trackPage } = useVisitTracker(companyToken)
+
     useEffect(() => {
-        const companyToken = sessionStorage.getItem('company-token')
-        if (!companyToken) {
+        const token = sessionStorage.getItem('company-token')
+        if (!token) {
             navigate('/', { replace: true })
             return
         }
@@ -43,13 +46,12 @@ export const CompanyView = () => {
 
             <main className="pt-16">
                 <div className="bg-primary-600/10 border-b border-primary-500/20 py-2 px-4 text-center">
-                    <p className="text-xs text-primary-300">
-
-                    </p>
+                    <p className="text-xs text-primary-300"></p>
                 </div>
 
-                <CompanyHeader profile={companyProfile} />
-                <CompanyTabs   profile={companyProfile} />
+                {/* trackPage wird an beide übergeben */}
+                <CompanyHeader profile={companyProfile} trackPage={trackPage} />
+                <CompanyTabs   profile={companyProfile} trackPage={trackPage} />
 
                 <footer className="border-t border-slate-800 py-6 text-center text-sm text-slate-600">
                     <p>© {new Date().getFullYear()} {companyProfile.fullName}</p>

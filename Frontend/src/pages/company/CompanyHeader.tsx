@@ -10,14 +10,14 @@ const GitHubIcon = () => (
 
 interface CompanyHeaderProps {
     profile: CompanyProfile
+    trackPage: (page: string) => void  // ← neu
 }
 
-export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
+export const CompanyHeader = ({ profile, trackPage }: CompanyHeaderProps) => {
     const { t } = useT()
     const { language } = useI18nStore()
     const isRTL = language === 'ar'
 
-    // ───  البيانات حسب اللغة ──────────────────────────────────────
     const fullName = (language === 'ar' ? profile.fullName_ar :
         language === 'en' ? profile.fullName_en :
             profile.fullName_de) || profile.fullName
@@ -34,9 +34,11 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
         language === 'en' ? profile.location_en :
             profile.location_de) || profile.location
 
-    const cvFullUrl = profile.cvUrl || null
-    const cvDownloadUrl = cvFullUrl ?
-        cvFullUrl.replace('/upload/', '/upload/fl_attachment/') : null
+    const cvFullUrl     = profile.cvUrl || null
+    const cvDownloadUrl = cvFullUrl
+        ? cvFullUrl.replace('/upload/', '/upload/fl_attachment/')
+        : null
+
     return (
         <div className="bg-slate-900 border-b border-slate-800">
             <div className="max-w-5xl mx-auto px-4 py-10">
@@ -48,9 +50,7 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
                              className="w-28 h-28 rounded-2xl object-cover object-[center_25%] ring-2 ring-primary-500/30 shadow-xl shrink-0" />
                     ) : (
                         <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center shrink-0">
-              <span className="text-3xl font-bold text-white">
-                {fullName?.charAt(0)}
-              </span>
+                            <span className="text-3xl font-bold text-white">{fullName?.charAt(0)}</span>
                         </div>
                     )}
 
@@ -67,8 +67,8 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
                         <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-slate-400">
                             {location && (
                                 <span className="flex items-center gap-1.5">
-                  <MapPin size={14} className="text-primary-400" /> {location}
-                </span>
+                                    <MapPin size={14} className="text-primary-400" /> {location}
+                                </span>
                             )}
                             {profile.email && (
                                 <a href={`mailto:${profile.email}`}
@@ -87,19 +87,37 @@ export const CompanyHeader = ({ profile }: CompanyHeaderProps) => {
                         {/* Links */}
                         <div className="flex gap-3 justify-center md:justify-start pt-1 flex-wrap">
 
+                            {/* ─── CV Anschauen → trackt 'cv-view' ─────────── */}
                             {cvFullUrl && (
                                 <button
-                                    onClick={() => window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(cvFullUrl)}&embedded=false`, '_blank')}
+                                    onClick={() => {
+                                        trackPage('cv-view')  // ← Tracking
+                                        window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(cvFullUrl)}&embedded=false`, '_blank')
+                                    }}
                                     className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors">
                                     <Eye size={14} /> {t('company.downloadCv')}
                                 </button>
                             )}
 
-                            {cvFullUrl && (
-                                <a href={cvDownloadUrl ?? cvFullUrl} download
-                                   className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg transition-colors">
+                            {/* ─── CV Herunterladen → trackt 'cv-download' ─── */}
+                            {cvDownloadUrl && (
+                                // ✅ Nachher — programmatischer Download, kein beforeunload!
+                                <button
+                                    onClick={async () => {
+                                        trackPage('cv-download')
+                                        // Blob Download — triggert KEIN beforeunload
+                                        const response = await fetch(cvDownloadUrl!)
+                                        const blob = await response.blob()
+                                        const url = URL.createObjectURL(blob)
+                                        const a = document.createElement('a')
+                                        a.href = url
+                                        a.download = 'cv.pdf'
+                                        a.click()
+                                        URL.revokeObjectURL(url)
+                                    }}
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg transition-colors">
                                     <Download size={14} /> PDF
-                                </a>
+                                </button>
                             )}
 
                             {profile.githubUrl && (

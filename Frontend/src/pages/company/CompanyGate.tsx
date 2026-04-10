@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { authApi, visitApi } from '../../api'
+import { authApi } from '../../api'
 import { useAuthStore } from '../../store'
 import { PageSpinner } from '../../components/ui'
 import { useI18nStore } from '../../i18n'

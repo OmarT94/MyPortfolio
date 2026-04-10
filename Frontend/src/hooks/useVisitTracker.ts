@@ -1,11 +1,9 @@
 import { useEffect, useRef } from 'react'
 
-
-// يتتبع الصفحات التي تزورها الشركة ويسجّلها عند مغادرة الصفحة
 export const useVisitTracker = (companyToken: string | null) => {
-  // profile + projects beim Start tracken
   const visitedPages = useRef<Set<string>>(new Set(['profile', 'projects']))
-  const startTime = useRef<number>(Date.now())
+  const startTime    = useRef<number>(Date.now())
+  const hasSent      = useRef<boolean>(false)  // ← verhindert doppeltes Senden
 
   const trackPage = (page: string) => {
     visitedPages.current.add(page)
@@ -15,8 +13,11 @@ export const useVisitTracker = (companyToken: string | null) => {
     if (!companyToken) return
 
     const handleUnload = () => {
+      // ─── Bereits gesendet? → abbrechen ───────────────────────────────────
+      if (hasSent.current) return
+      hasSent.current = true
+
       const duration = Math.floor((Date.now() - startTime.current) / 1000)
-      // sendBeacon لضمان الإرسال حتى عند إغلاق المتصفح
       const blob = new Blob(
           [JSON.stringify({
             companyToken,
@@ -26,6 +27,9 @@ export const useVisitTracker = (companyToken: string | null) => {
           { type: 'application/json' }
       )
       navigator.sendBeacon('/api/public/visits/log', blob)
+
+      // ─── Reset nach 2 Sekunden falls Seite noch offen ist (z.B. Download) ─
+      setTimeout(() => { hasSent.current = false }, 2000)
     }
 
     window.addEventListener('beforeunload', handleUnload)
