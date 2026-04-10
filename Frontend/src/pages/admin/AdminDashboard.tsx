@@ -14,14 +14,11 @@ export const AdminDashboard = () => {
   const token       = useAuthStore((state) => state.token)
   const companies   = useCompanyStore((state) => state.companies)
   const visits      = useVisitStore((state) => state.visits)
-  const stats       = useVisitStore((state) => state.stats)
   const unreadCount = useNotificationStore((state) => state.unreadCount)
   const fetched     = useRef(false)
   const [activeTab, setActiveTab] = useState('dashboard')
   const { t } = useT()
   useWebSocket()
-
-
 
   useEffect(() => {
     if (fetched.current || !token) return
@@ -47,14 +44,16 @@ export const AdminDashboard = () => {
 
             <div className="flex gap-1 bg-slate-900 border border-slate-800 rounded-xl p-1">
               {[
-                // ✅ بعد — بعد إضافة const { t } = useT()
-                { id: 'dashboard', label: t('admin.dashboard'),   icon: LayoutDashboard },
-                { id: 'profile',   label: t('admin.editProfile'), icon: UserCog         },
-                { id: 'bewerbungen', label: 'Bewerbungen', icon: Briefcase }
+                { id: 'dashboard',   label: t('admin.dashboard'),   icon: LayoutDashboard },
+                { id: 'profile',     label: t('admin.editProfile'), icon: UserCog         },
+                { id: 'bewerbungen', label: 'Bewerbungen',          icon: Briefcase       },
               ].map(({ id, label, icon: Icon }) => (
-                  <button key={id} onClick={() => setActiveTab(id)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-                  ${activeTab === id ? 'bg-primary-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>
+                  <button
+                      key={id}
+                      onClick={() => setActiveTab(id)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
+                  ${activeTab === id ? 'bg-primary-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}
+                  >
                     <Icon size={15} /> {label}
                   </button>
               ))}
@@ -64,7 +63,8 @@ export const AdminDashboard = () => {
           {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
               <>
-                <StatsCards companies={companies} stats={stats} unreadCount={unreadCount} />
+                {/* ← stats entfernt, visits hinzugefügt */}
+                <StatsCards companies={companies} unreadCount={unreadCount} visits={visits} />
                 <div className="grid lg:grid-cols-2 gap-6">
                   <CompanyTable />
                   <VisitsTable visits={visits} />
@@ -74,6 +74,8 @@ export const AdminDashboard = () => {
 
           {/* Profile Tab */}
           {activeTab === 'profile' && <ProfileEditor />}
+
+          {/* Bewerbungen Tab */}
           {activeTab === 'bewerbungen' && <JobApplicationsTab />}
 
         </div>
