@@ -16,14 +16,15 @@ export const useVisitTracker = (companyToken: string | null) => {
     const handleUnload = () => {
       const duration = Math.floor((Date.now() - startTime.current) / 1000)
       // sendBeacon لضمان الإرسال حتى عند إغلاق المتصفح
-      navigator.sendBeacon(
-        '/api/public/visits/log',
-        JSON.stringify({
-          companyToken,
-          pagesViewed: Array.from(visitedPages.current),
-          durationSeconds: duration,
-        })
+      const blob = new Blob(
+          [JSON.stringify({
+            companyToken,
+            pagesViewed: Array.from(visitedPages.current),
+            durationSeconds: duration,
+          })],
+          { type: 'application/json' }
       )
+      navigator.sendBeacon('/api/public/visits/log', blob)
     }
 
     window.addEventListener('beforeunload', handleUnload)

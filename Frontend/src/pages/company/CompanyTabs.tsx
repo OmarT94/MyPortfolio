@@ -4,7 +4,6 @@ import { ProjectCard, CertificateCard, SkillBar, EmptyState } from '../../compon
 import { StaggerContainer, StaggerItem } from '../../components/ui/AnimatedSection'
 import type { CompanyProfile } from '../../types'
 import { useVisitTracker } from '../../hooks/useVisitTracker'
-import { useAuthStore } from '../../store'
 import { useT } from '../../i18n'
 
 interface CompanyTabsProps {
@@ -13,8 +12,11 @@ interface CompanyTabsProps {
 
 export const CompanyTabs = ({ profile }: CompanyTabsProps) => {
   const [activeTab, setActiveTab] = useState('projects')
-  const { token } = useAuthStore()
-  const { trackPage } = useVisitTracker(token)
+
+  // ✅ magic-token = der kurze 16-Zeichen Token (nicht der JWT!)
+  const companyToken = sessionStorage.getItem('magic-token')
+  const { trackPage } = useVisitTracker(companyToken)
+
   const { t } = useT()
 
   const TABS = [
