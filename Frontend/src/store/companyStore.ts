@@ -50,7 +50,7 @@ export const useCompanyStore
   // ─── تفعيل / إلغاء تفعيل الرابط ────────────────────────────────────────────
   toggleStatus: async (id, currentStatus) => {
     try {
-      const updated = await companyApi.updateStatus(id, { isActive: !currentStatus })
+      const updated = await companyApi.updateStatus(id, { active: !currentStatus })
       set((state) => ({
         companies: state.companies.map((c) => (c.id === id ? updated : c)),
       }))

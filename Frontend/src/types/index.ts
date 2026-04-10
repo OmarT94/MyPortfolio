@@ -42,7 +42,7 @@ export interface CreateCompanyRequest {
 }
 
 export interface UpdateStatusRequest {
-    isActive: boolean
+    active: boolean
 }
 
 export interface TokenValidResponse {
