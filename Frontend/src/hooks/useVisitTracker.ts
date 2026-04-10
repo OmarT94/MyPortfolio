@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react'
 
 // يتتبع الصفحات التي تزورها الشركة ويسجّلها عند مغادرة الصفحة
 export const useVisitTracker = (companyToken: string | null) => {
-  const visitedPages = useRef<Set<string>>(new Set())
+  // profile + projects beim Start tracken
+  const visitedPages = useRef<Set<string>>(new Set(['profile', 'projects']))
   const startTime = useRef<number>(Date.now())
 
   const trackPage = (page: string) => {

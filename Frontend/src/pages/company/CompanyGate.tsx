@@ -30,11 +30,9 @@ export const CompanyGate = () => {
                 if (res.valid && res.accessToken) {
                     if (res.language) setLanguage(res.language as 'ar' | 'en' | 'de')
 
-                    // ✅ Magic Token speichern — für useVisitTracker
+                    //  Magic Token speichern — für useVisitTracker
                     sessionStorage.setItem('magic-token', token)
 
-                    // Visit sofort loggen
-                    visitApi.log({ companyToken: token, pagesViewed: ['profile'], durationSeconds: 0 })
 
                     setCompanyAuth(res.accessToken, res.companyName)
                     navigate('/company/view', { replace: true })
