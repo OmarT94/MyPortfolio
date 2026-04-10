@@ -32,18 +32,21 @@ public class ProfileService {
         response.setFullName_ar(profile.getFullName_ar());
         response.setTitle_ar(profile.getTitle_ar());
         response.setBio_ar(profile.getBio_ar());
+        response.setBio_short_ar(profile.getBio_short_ar());
         response.setLocation_ar(profile.getLocation_ar());
 
         // EN
         response.setFullName_en(profile.getFullName_en());
         response.setTitle_en(profile.getTitle_en());
         response.setBio_en(profile.getBio_en());
+        response.setBio_short_en(profile.getBio_short_en());
         response.setLocation_en(profile.getLocation_en());
 
         // DE
         response.setFullName_de(profile.getFullName_de());
         response.setTitle_de(profile.getTitle_de());
         response.setBio_de(profile.getBio_de());
+        response.setBio_short_de(profile.getBio_short_de());
         response.setLocation_de(profile.getLocation_de());
 
         return response;
@@ -106,18 +109,21 @@ public class ProfileService {
         profile.setFullName_ar(request.getFullName_ar());
         profile.setTitle_ar(request.getTitle_ar());
         profile.setBio_ar(request.getBio_ar());
+        profile.setBio_short_ar(profile.getBio_short_ar());
         profile.setLocation_ar(request.getLocation_ar());
 
         // EN
         profile.setFullName_en(request.getFullName_en());
         profile.setTitle_en(request.getTitle_en());
         profile.setBio_en(request.getBio_en());
+        profile.setBio_short_en(request.getBio_short_en());
         profile.setLocation_en(request.getLocation_en());
 
         // DE
         profile.setFullName_de(request.getFullName_de());
         profile.setTitle_de(request.getTitle_de());
         profile.setBio_de(request.getBio_de());
+        profile.setBio_short_de(request.getBio_short_de());
         profile.setLocation_de(request.getLocation_de());
 
         profileRepo.save(profile);

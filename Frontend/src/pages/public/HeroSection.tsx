@@ -33,9 +33,9 @@ export const HeroSection = ({ profile }: HeroSectionProps) => {
         language === 'en' ? profile.title_en :
             profile.title_de) || profile.title
 
-    const bio = (language === 'ar' ? profile.bio_ar :
-        language === 'en' ? profile.bio_en :
-            profile.bio_de) || profile.bio
+    const bio = (language === 'ar' ? profile.bio_short_ar :
+        language === 'en' ? profile.bio_short_en :
+            profile.bio_short_de) || profile.bio
 
     const location = (language === 'ar' ? profile.location_ar :
         language === 'en' ? profile.location_en :

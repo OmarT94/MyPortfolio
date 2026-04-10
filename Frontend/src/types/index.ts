@@ -90,18 +90,21 @@ export interface PublicProfile {
     fullName_ar?: string
     title_ar?: string
     bio_ar?: string
+    bio_short_ar?: string
     location_ar?: string
 
     // ─── EN ───────────────────────────────────────────────────────────────
     fullName_en?: string
     title_en?: string
     bio_en?: string
+    bio_short_en?: string
     location_en?: string
 
     // ─── DE ───────────────────────────────────────────────────────────────
     fullName_de?: string
     title_de?: string
     bio_de?: string
+    bio_short_de?: string
     location_de?: string
 }
 
@@ -132,18 +135,21 @@ export interface UpdateProfileRequest {
     fullName_ar?: string
     title_ar?: string
     bio_ar?: string
+    bio_short_ar?: string
     location_ar?: string
 
     // ─── EN ───────────────────────────────────────────────────────────────
     fullName_en?: string
     title_en?: string
     bio_en?: string
+    bio_short_en?: string
     location_en?: string
 
     // ─── DE ───────────────────────────────────────────────────────────────
     fullName_de?: string
     title_de?: string
     bio_de?: string
+    bio_short_de?: string
     location_de?: string
 }
 

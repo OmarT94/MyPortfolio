@@ -27,7 +27,7 @@ export const HomePage = () => {
                 <ContactSection profile={publicProfile} />
             </div>
             <footer className="border-t border-slate-800 py-8 text-center text-sm text-slate-600">
-                <p>© {new Date().getFullYear()} {publicProfile.fullName} — صُنع بـ ❤️</p>
+                <p>© {new Date().getFullYear()} {publicProfile.fullName} </p>
             </footer>
         </Layout>
     )
