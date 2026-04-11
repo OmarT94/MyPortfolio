@@ -22,7 +22,7 @@ public class Profile {
     // ─── المعلومات العامة (يراها الجميع) ─────────────────────────────────────
     private String fullName;
     private String title;           // مثل: "Full Stack Developer"
-    private String bio;             // وصف مختصر
+    private String bio;             // وصف
     private String photoUrl;        // مسار الصورة الشخصية
     private String email;
     private String location;
@@ -72,6 +72,14 @@ public class Profile {
         private String liveLink;
         private List<String> technologies;
         private String imageUrl;
+
+        private String title_ar;
+        private String title_en;
+        private String title_de;
+
+        private String description_ar;
+        private String description_en;
+        private String description_de;
     }
 
     @Data
@@ -85,6 +93,13 @@ public class Profile {
         private String date;
         private String imageUrl;
         private String credentialUrl;
+
+        private String title_ar;
+        private String title_en;
+        private String title_de;
+        private String issuer_ar;
+        private String issuer_en;
+        private String issuer_de;
     }
 
     @Data

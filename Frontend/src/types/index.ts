@@ -61,6 +61,13 @@ export interface Project {
     liveLink?: string
     technologies: string[]
     imageUrl?: string
+
+    title_ar?: string
+    title_en?: string
+    title_de?: string
+    description_ar?: string
+    description_en?: string
+    description_de?: string
 }
 
 export interface Certificate {
@@ -70,6 +77,13 @@ export interface Certificate {
     date: string
     imageUrl?: string
     credentialUrl?: string
+
+    title_ar?: string
+    title_en?: string
+    title_de?: string
+    issuer_ar?: string
+    issuer_en?: string
+    issuer_de?: string
 }
 
 export interface Skill {

@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Badge } from './Badge'
 import type { Project } from '../../types'
+import { useI18nStore } from '../../i18n'
 
 const GitHubIcon = () => (
     <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
@@ -9,50 +10,61 @@ const GitHubIcon = () => (
     </svg>
 )
 
-export const ProjectCard = ({ title, description, githubLink, liveLink, technologies, imageUrl }: Project) => (
-    <motion.div
-        whileHover={{ y: -6, scale: 1.02 }}
-        transition={{ duration: 0.2 }}
-        className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-primary-500/40 hover:shadow-lg hover:shadow-primary-500/10 transition-colors duration-300 flex flex-col h-full"
-    >
-        {/* Image — feste Höhe */}
-        {imageUrl ? (
-            <img src={imageUrl} alt={title} className="w-full h-44 object-cover shrink-0" />
-        ) : (
-            <div className="w-full h-44 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shrink-0">
-                <span className="text-4xl">💻</span>
+export const ProjectCard = ({ title, description, githubLink, liveLink, technologies, imageUrl,
+                                title_ar, title_en, title_de, description_ar, description_en, description_de }: Project) => {
+
+    // ─── Sprache auswählen ────────────────────────────────────────────────────
+    const { language } = useI18nStore()
+    const localTitle = (language === 'ar' ? title_ar :
+        language === 'en' ? title_en :
+            title_de) || title
+    const localDesc  = (language === 'ar' ? description_ar :
+        language === 'en' ? description_en :
+            description_de) || description
+
+    return (
+        <motion.div
+            whileHover={{ y: -6, scale: 1.02 }}
+            transition={{ duration: 0.2 }}
+            className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-primary-500/40 hover:shadow-lg hover:shadow-primary-500/10 transition-colors duration-300 flex flex-col h-full"
+        >
+            {/* Image — feste Höhe */}
+            {imageUrl ? (
+                <img src={imageUrl} alt={localTitle} className="w-full h-44 object-cover shrink-0" />
+            ) : (
+                <div className="w-full h-44 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shrink-0">
+                    <span className="text-4xl">💻</span>
+                </div>
+            )}
+
+            {/* Content */}
+            <div className="p-5 space-y-3 flex flex-col flex-1">
+                <h3 className="text-base font-semibold text-slate-100">{localTitle}</h3>
+                <p className="text-sm text-slate-400 line-clamp-3 flex-1">{localDesc}</p>
+
+                {/* Technologies */}
+                <div className="flex flex-wrap gap-1.5">
+                    {technologies.map((tech) => (
+                        <Badge key={tech} variant="info">{tech}</Badge>
+                    ))}
+                </div>
+
+                {/* Links */}
+                <div className="flex gap-3 pt-1 mt-auto">
+                    {githubLink && (
+                        <a href={githubLink} target="_blank" rel="noreferrer"
+                           className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-100 transition-colors">
+                            <GitHubIcon /> GitHub
+                        </a>
+                    )}
+                    {liveLink && (
+                        <a href={liveLink} target="_blank" rel="noreferrer"
+                           className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-primary-400 transition-colors">
+                            <ExternalLink size={14} /> Live Demo
+                        </a>
+                    )}
+                </div>
             </div>
-        )}
-
-        {/* Content — flex-1 füllt den Rest */}
-        <div className="p-5 space-y-3 flex flex-col flex-1">
-            <h3 className="text-base font-semibold text-slate-100">{title}</h3>
-
-            {/* Description — feste Höhe mit Clamp */}
-            <p className="text-sm text-slate-400 line-clamp-3 flex-1">{description}</p>
-
-            {/* Technologies */}
-            <div className="flex flex-wrap gap-1.5">
-                {technologies.map((tech) => (
-                    <Badge key={tech} variant="info">{tech}</Badge>
-                ))}
-            </div>
-
-            {/* Links — immer unten */}
-            <div className="flex gap-3 pt-1 mt-auto">
-                {githubLink && (
-                    <a href={githubLink} target="_blank" rel="noreferrer"
-                       className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-100 transition-colors">
-                        <GitHubIcon /> GitHub
-                    </a>
-                )}
-                {liveLink && (
-                    <a href={liveLink} target="_blank" rel="noreferrer"
-                       className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-primary-400 transition-colors">
-                        <ExternalLink size={14} /> Live Demo
-                    </a>
-                )}
-            </div>
-        </div>
-    </motion.div>
-)
+        </motion.div>
+    )
+}

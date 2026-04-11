@@ -20,8 +20,6 @@ export const ProfileEditor = () => {
     fullName_en: '', title_en: '', bio_en: '', location_en: '',
     // ─── DE ───────────────────────────────────────────────────────────
     fullName_de: '', title_de: '', bio_de: '', location_de: '',
-    // ─── Kurze Bio für Hero ───────────────────────────────────────────
-    bio_short_ar: '', bio_short_en: '', bio_short_de: '',
   })
 
   const [projects,     setProjects]     = useState<Project[]>([])
@@ -63,10 +61,6 @@ export const ProfileEditor = () => {
       title_de:    companyProfile.title_de    ?? '',
       bio_de:      companyProfile.bio_de      ?? '',
       location_de: companyProfile.location_de ?? '',
-
-      bio_short_ar: companyProfile.bio_short_ar ?? '',
-      bio_short_en: companyProfile.bio_short_en ?? '',
-      bio_short_de: companyProfile.bio_short_de ?? '',
     })
     setProjects(companyProfile.projects     ?? [])
     setCertificates(companyProfile.certificates ?? [])
@@ -208,23 +202,14 @@ export const ProfileEditor = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <Input label="الاسم" value={form.fullName_ar}
                      onChange={e => setForm({...form, fullName_ar: e.target.value})}
-                     placeholder="عمر تمر"/>
+                     placeholder="عمر تمر" />
               <Input label="المسمى الوظيفي" value={form.title_ar}
                      onChange={e => setForm({...form, title_ar: e.target.value})}
-                     placeholder="مطور برمجيات"/>
+                     placeholder="مطور برمجيات" />
               <Input label="الموقع" value={form.location_ar}
                      onChange={e => setForm({...form, location_ar: e.target.value})}
-                     placeholder="برلين، ألمانيا"/>
+                     placeholder="برلين، ألمانيا" />
             </div>
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة Hero (مختصرة)</label>
-              <textarea rows={2} value={form.bio_short_ar}
-                        onChange={e => setForm({...form, bio_short_ar: e.target.value})}
-                        placeholder="جملة أو جملتان فقط..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-
             <div className="mt-3">
               <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
               <textarea rows={2} value={form.bio_ar}
@@ -233,7 +218,6 @@ export const ProfileEditor = () => {
                         className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
               />
             </div>
-
           </div>
 
           {/* الإنجليزية */}
@@ -242,21 +226,13 @@ export const ProfileEditor = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <Input label="Full Name" value={form.fullName_en}
                      onChange={e => setForm({...form, fullName_en: e.target.value})}
-                     placeholder="Omar Tamr"/>
+                     placeholder="Omar Tamr" />
               <Input label="Job Title" value={form.title_en}
                      onChange={e => setForm({...form, title_en: e.target.value})}
-                     placeholder="Full Stack Developer"/>
+                     placeholder="Full Stack Developer" />
               <Input label="Location" value={form.location_en}
                      onChange={e => setForm({...form, location_en: e.target.value})}
-                     placeholder="Berlin, Germany"/>
-            </div>
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Bio (short)</label>
-              <textarea rows={2} value={form.bio_short_en}
-                        onChange={e => setForm({...form, bio_short_en: e.target.value})}
-                        placeholder="One or two sentences only..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
+                     placeholder="Berlin, Germany" />
             </div>
             <div className="mt-3">
               <label className="text-sm font-medium text-slate-300 block mb-1.5">Bio</label>
@@ -274,21 +250,13 @@ export const ProfileEditor = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <Input label="Vollständiger Name" value={form.fullName_de}
                      onChange={e => setForm({...form, fullName_de: e.target.value})}
-                     placeholder="Omar Tamr"/>
+                     placeholder="Omar Tamr" />
               <Input label="Berufsbezeichnung" value={form.title_de}
                      onChange={e => setForm({...form, title_de: e.target.value})}
-                     placeholder="Full Stack Entwickler"/>
+                     placeholder="Full Stack Entwickler" />
               <Input label="Standort" value={form.location_de}
                      onChange={e => setForm({...form, location_de: e.target.value})}
-                     placeholder="Berlin, Deutschland"/>
-            </div>
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Kurzbeschreibung</label>
-              <textarea rows={2} value={form.bio_short_de}
-                        onChange={e => setForm({...form, bio_short_de: e.target.value})}
-                        placeholder="Nur ein oder zwei Sätze..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
+                     placeholder="Berlin, Deutschland" />
             </div>
             <div className="mt-3">
               <label className="text-sm font-medium text-slate-300 block mb-1.5">Biografie</label>
@@ -362,6 +330,21 @@ export const ProfileEditor = () => {
                               className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
                     />
                   </div>
+
+                  {/* ─── Mehrsprachigkeit ──────────────────────────────────────── */}
+                  <div className="border-t border-slate-700 pt-3 mt-1 space-y-3">
+                    <p className="text-xs text-slate-500">🌐 Übersetzungen (optional)</p>
+                    <div className="grid md:grid-cols-3 gap-3">
+                      <Input label="🇸🇦 اسم المشروع" value={p.title_ar ?? ''} onChange={e => updateProject(i, 'title_ar', e.target.value)} placeholder="اسم المشروع بالعربية" />
+                      <Input label="🇬🇧 Project Name" value={p.title_en ?? ''} onChange={e => updateProject(i, 'title_en', e.target.value)} placeholder="Project name in English" />
+                      <Input label="🇩🇪 Projektname"  value={p.title_de ?? ''} onChange={e => updateProject(i, 'title_de', e.target.value)} placeholder="Projektname auf Deutsch" />
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-3">
+                      <textarea rows={2} value={p.description_ar ?? ''} onChange={e => updateProject(i, 'description_ar', e.target.value)} placeholder="🇸🇦 الوصف بالعربية..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                      <textarea rows={2} value={p.description_en ?? ''} onChange={e => updateProject(i, 'description_en', e.target.value)} placeholder="🇬🇧 Description in English..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                      <textarea rows={2} value={p.description_de ?? ''} onChange={e => updateProject(i, 'description_de', e.target.value)} placeholder="🇩🇪 Beschreibung auf Deutsch..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                    </div>
+                  </div>
                 </div>
             ))}
           </div>
@@ -393,6 +376,21 @@ export const ProfileEditor = () => {
                     <Input label="الجهة المانحة" value={c.issuer}        onChange={e => updateCertificate(i, 'issuer', e.target.value)}        placeholder="Amazon Web Services" />
                     <Input label="التاريخ"        value={c.date}          onChange={e => updateCertificate(i, 'date', e.target.value)}          placeholder="2024-01" />
                     <Input label="رابط التحقق"   value={c.credentialUrl ?? ''} onChange={e => updateCertificate(i, 'credentialUrl', e.target.value)} placeholder="https://..." />
+                  </div>
+
+                  {/* ─── Mehrsprachigkeit ──────────────────────────────────────── */}
+                  <div className="border-t border-slate-700 pt-3 mt-1 space-y-3">
+                    <p className="text-xs text-slate-500">🌐 Übersetzungen (optional)</p>
+                    <div className="grid md:grid-cols-3 gap-3">
+                      <Input label="🇸🇦 اسم الشهادة" value={c.title_ar ?? ''} onChange={e => updateCertificate(i, 'title_ar', e.target.value)} placeholder="اسم الشهادة بالعربية" />
+                      <Input label="🇬🇧 Certificate"  value={c.title_en ?? ''} onChange={e => updateCertificate(i, 'title_en', e.target.value)} placeholder="Certificate name in English" />
+                      <Input label="🇩🇪 Zertifikat"   value={c.title_de ?? ''} onChange={e => updateCertificate(i, 'title_de', e.target.value)} placeholder="Zertifikatname auf Deutsch" />
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-3">
+                      <Input label="🇸🇦 الجهة المانحة" value={c.issuer_ar ?? ''} onChange={e => updateCertificate(i, 'issuer_ar', e.target.value)} placeholder="الجهة بالعربية" />
+                      <Input label="🇬🇧 Issuer"         value={c.issuer_en ?? ''} onChange={e => updateCertificate(i, 'issuer_en', e.target.value)} placeholder="Issuer in English" />
+                      <Input label="🇩🇪 Aussteller"     value={c.issuer_de ?? ''} onChange={e => updateCertificate(i, 'issuer_de', e.target.value)} placeholder="Aussteller auf Deutsch" />
+                    </div>
                   </div>
                 </div>
             ))}
