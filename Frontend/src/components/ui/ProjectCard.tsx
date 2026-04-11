@@ -13,20 +13,23 @@ export const ProjectCard = ({ title, description, githubLink, liveLink, technolo
     <motion.div
         whileHover={{ y: -6, scale: 1.02 }}
         transition={{ duration: 0.2 }}
-        className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-primary-500/40 hover:shadow-lg hover:shadow-primary-500/10 transition-colors duration-300"
+        className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-primary-500/40 hover:shadow-lg hover:shadow-primary-500/10 transition-colors duration-300 flex flex-col h-full"
     >
-        {/* Image */}
+        {/* Image — feste Höhe */}
         {imageUrl ? (
-            <img src={imageUrl} alt={title} className="w-full h-44 object-cover" />
+            <img src={imageUrl} alt={title} className="w-full h-44 object-cover shrink-0" />
         ) : (
-            <div className="w-full h-44 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+            <div className="w-full h-44 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shrink-0">
                 <span className="text-4xl">💻</span>
             </div>
         )}
 
-        <div className="p-5 space-y-3">
+        {/* Content — flex-1 füllt den Rest */}
+        <div className="p-5 space-y-3 flex flex-col flex-1">
             <h3 className="text-base font-semibold text-slate-100">{title}</h3>
-            <p className="text-sm text-slate-400 line-clamp-2">{description}</p>
+
+            {/* Description — feste Höhe mit Clamp */}
+            <p className="text-sm text-slate-400 line-clamp-3 flex-1">{description}</p>
 
             {/* Technologies */}
             <div className="flex flex-wrap gap-1.5">
@@ -35,8 +38,8 @@ export const ProjectCard = ({ title, description, githubLink, liveLink, technolo
                 ))}
             </div>
 
-            {/* Links */}
-            <div className="flex gap-3 pt-1">
+            {/* Links — immer unten */}
+            <div className="flex gap-3 pt-1 mt-auto">
                 {githubLink && (
                     <a href={githubLink} target="_blank" rel="noreferrer"
                        className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-100 transition-colors">

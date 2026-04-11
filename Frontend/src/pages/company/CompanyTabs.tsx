@@ -52,7 +52,7 @@ export const CompanyTabs = ({ profile, trackPage }: CompanyTabsProps) => {
         {/* Projects Tab */}
         {activeTab === 'projects' && (
             profile.projects?.length > 0 ? (
-                <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                   {profile.projects.map((project) => (
                       <StaggerItem key={project.id}>
                         <ProjectCard {...project} />
@@ -67,7 +67,7 @@ export const CompanyTabs = ({ profile, trackPage }: CompanyTabsProps) => {
         {/* Certificates Tab */}
         {activeTab === 'certificates' && (
             profile.certificates?.length > 0 ? (
-                <StaggerContainer className="grid md:grid-cols-2 gap-4">
+                <StaggerContainer className="grid md:grid-cols-2 gap-4 items-stretch">
                   {profile.certificates.map((cert) => (
                       <StaggerItem key={cert.id}>
                         <CertificateCard {...cert} />
