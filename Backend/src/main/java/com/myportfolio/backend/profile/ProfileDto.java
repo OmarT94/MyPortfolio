@@ -52,18 +52,21 @@ public class ProfileDto {
         // ─── AR ───────────────────────────────────────────────────────────────────
         private String fullName_ar;
         private String title_ar;
+        private String bio_short_ar;
         private String bio_ar;
         private String location_ar;
 
         // ─── EN ───────────────────────────────────────────────────────────────────
         private String fullName_en;
         private String title_en;
+        private String bio_short_en;
         private String bio_en;
         private String location_en;
 
         // ─── DE ───────────────────────────────────────────────────────────────────
         private String fullName_de;
         private String title_de;
+        private String bio_short_de;
         private String bio_de;
         private String location_de;
 

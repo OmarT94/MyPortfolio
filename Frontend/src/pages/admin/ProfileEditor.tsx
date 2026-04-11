@@ -208,14 +208,23 @@ export const ProfileEditor = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <Input label="الاسم" value={form.fullName_ar}
                      onChange={e => setForm({...form, fullName_ar: e.target.value})}
-                     placeholder="عمر تمر" />
+                     placeholder="عمر تمر"/>
               <Input label="المسمى الوظيفي" value={form.title_ar}
                      onChange={e => setForm({...form, title_ar: e.target.value})}
-                     placeholder="مطور برمجيات" />
+                     placeholder="مطور برمجيات"/>
               <Input label="الموقع" value={form.location_ar}
                      onChange={e => setForm({...form, location_ar: e.target.value})}
-                     placeholder="برلين، ألمانيا" />
+                     placeholder="برلين، ألمانيا"/>
             </div>
+            <div className="mt-3">
+              <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة Hero (مختصرة)</label>
+              <textarea rows={2} value={form.bio_short_ar}
+                        onChange={e => setForm({...form, bio_short_ar: e.target.value})}
+                        placeholder="جملة أو جملتان فقط..."
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+              />
+            </div>
+
             <div className="mt-3">
               <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
               <textarea rows={2} value={form.bio_ar}
@@ -224,6 +233,7 @@ export const ProfileEditor = () => {
                         className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
               />
             </div>
+
           </div>
 
           {/* الإنجليزية */}
@@ -232,13 +242,21 @@ export const ProfileEditor = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <Input label="Full Name" value={form.fullName_en}
                      onChange={e => setForm({...form, fullName_en: e.target.value})}
-                     placeholder="Omar Tamr" />
+                     placeholder="Omar Tamr"/>
               <Input label="Job Title" value={form.title_en}
                      onChange={e => setForm({...form, title_en: e.target.value})}
-                     placeholder="Full Stack Developer" />
+                     placeholder="Full Stack Developer"/>
               <Input label="Location" value={form.location_en}
                      onChange={e => setForm({...form, location_en: e.target.value})}
-                     placeholder="Berlin, Germany" />
+                     placeholder="Berlin, Germany"/>
+            </div>
+            <div className="mt-3">
+              <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Bio (short)</label>
+              <textarea rows={2} value={form.bio_short_en}
+                        onChange={e => setForm({...form, bio_short_en: e.target.value})}
+                        placeholder="One or two sentences only..."
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+              />
             </div>
             <div className="mt-3">
               <label className="text-sm font-medium text-slate-300 block mb-1.5">Bio</label>
@@ -256,51 +274,27 @@ export const ProfileEditor = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <Input label="Vollständiger Name" value={form.fullName_de}
                      onChange={e => setForm({...form, fullName_de: e.target.value})}
-                     placeholder="Omar Tamr" />
+                     placeholder="Omar Tamr"/>
               <Input label="Berufsbezeichnung" value={form.title_de}
                      onChange={e => setForm({...form, title_de: e.target.value})}
-                     placeholder="Full Stack Entwickler" />
+                     placeholder="Full Stack Entwickler"/>
               <Input label="Standort" value={form.location_de}
                      onChange={e => setForm({...form, location_de: e.target.value})}
-                     placeholder="Berlin, Deutschland" />
+                     placeholder="Berlin, Deutschland"/>
+            </div>
+            <div className="mt-3">
+              <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Kurzbeschreibung</label>
+              <textarea rows={2} value={form.bio_short_de}
+                        onChange={e => setForm({...form, bio_short_de: e.target.value})}
+                        placeholder="Nur ein oder zwei Sätze..."
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+              />
             </div>
             <div className="mt-3">
               <label className="text-sm font-medium text-slate-300 block mb-1.5">Biografie</label>
               <textarea rows={2} value={form.bio_de}
                         onChange={e => setForm({...form, bio_de: e.target.value})}
                         placeholder="Kurze Biografie auf Deutsch..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-          </div>
-        </Card>
-
-        {/* Kurze Bio für Hero */}
-        <Card>
-          <CardTitle className="mb-4">Kurzbeschreibung (Hero-Sektion)</CardTitle>
-          <p className="text-xs text-slate-500 mb-4">Wird auf der Startseite angezeigt — kurz und prägnant halten</p>
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">🇸🇦 العربية</label>
-              <textarea rows={2} value={form.bio_short_ar}
-                        onChange={e => setForm({...form, bio_short_ar: e.target.value})}
-                        placeholder="وصف مختصر بالعربية..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">🇬🇧 English</label>
-              <textarea rows={2} value={form.bio_short_en}
-                        onChange={e => setForm({...form, bio_short_en: e.target.value})}
-                        placeholder="Short description in English..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">🇩🇪 Deutsch</label>
-              <textarea rows={2} value={form.bio_short_de}
-                        onChange={e => setForm({...form, bio_short_de: e.target.value})}
-                        placeholder="Kurze Beschreibung auf Deutsch..."
                         className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
               />
             </div>
