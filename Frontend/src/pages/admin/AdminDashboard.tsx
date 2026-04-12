@@ -27,6 +27,7 @@ export const AdminDashboard = () => {
     useVisitStore.getState().fetchAll()
     useVisitStore.getState().fetchStats()
     useNotificationStore.getState().fetchUnreadCount()
+    useNotificationStore.getState().fetchAll()
   }, [token])
 
   if (!token) return <div style={{ color: 'white' }}>No token!</div>
