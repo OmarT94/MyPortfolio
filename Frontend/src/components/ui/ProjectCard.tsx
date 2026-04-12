@@ -50,7 +50,7 @@ export const ProjectCard = ({ title, description, githubLink, liveLink, technolo
 
                     {/* Description — immer 3 Zeilen */}
                     <div className="flex-1">
-                        <p className="text-sm text-slate-400 line-clamp-3">{localDesc}</p>
+                        <p className="text-sm text-slate-400 line-clamp-3 break-all">{localDesc}</p>
                         {isLong && (
                             <button
                                 onClick={() => setShowModal(true)}
