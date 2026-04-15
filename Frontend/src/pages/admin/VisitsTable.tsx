@@ -27,7 +27,7 @@ export const VisitsTable = ({ visits }: VisitsTableProps) => {
 
     const formatDuration = (seconds: number) => {
         if (seconds === 0) return '—'
-        if (seconds < 60)  return `${seconds} ث`
+        if (seconds < 60)  return `${seconds} sec`
         if (seconds < 3600) return `${Math.floor(seconds / 60)} Min`
         return `${Math.floor(seconds / 3600)} Std`
     }
