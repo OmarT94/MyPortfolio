@@ -2,6 +2,10 @@
 User-agent: *
 Allow: /
 
+# ─── Facebook Crawler ────────────────────────────────────────────────
+User-agent: facebookexternalhit
+Allow: /
+
 # ─── يمنع فهرسة صفحات Admin و Company (سرية) ────────────────────────
 Disallow: /admin/
 Disallow: /company/
