@@ -1,4 +1,4 @@
-{$PORT:3000}
+:{env.PORT}
 
 root * /app/dist
 encode gzip

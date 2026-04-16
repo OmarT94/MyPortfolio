@@ -3,4 +3,4 @@ builder = "nixpacks"
 buildCommand = "npm install && npm run build"
 
 [deploy]
-startCommand = "caddy run --config /app/Caddyfile"
+startCommand = "caddy run --config /app/Caddyfile --adapter caddyfile"
