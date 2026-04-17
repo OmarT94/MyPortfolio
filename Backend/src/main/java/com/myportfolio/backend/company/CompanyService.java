@@ -19,7 +19,7 @@ public class CompanyService {
     private final ApplicationEventPublisher eventPublisher;
     private final JobApplicationRepo jobApplicationRepo;
 
-    @Value("${cors.allowed-origins}")
+    @Value("${frontend.url}")
     private String frontendUrl;
 
     public CompanyService(CompanyRepo companyRepo,
