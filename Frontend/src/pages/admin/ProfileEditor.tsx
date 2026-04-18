@@ -11,6 +11,16 @@ export const ProfileEditor = () => {
   const fileRef = useRef<HTMLInputElement>(null)
   const cvRef   = useRef<HTMLInputElement>(null)
 
+  // ─── Tabs ─────────────────────────────────────────────────────────────────
+  const [activeTab, setActiveTab] = useState<'info' | 'projects' | 'certificates' | 'skills'>('info')
+
+  const TABS = [
+    { id: 'info',         label: '👤 المعلومات'  },
+    { id: 'projects',     label: '💻 المشاريع'   },
+    { id: 'certificates', label: '🏆 الشهادات'   },
+    { id: 'skills',       label: '⚡ المهارات'   },
+  ] as const
+
   const [form, setForm] = useState({
     fullName: '', title: '', bio: '', email: '',
     phone: '', location: '', githubUrl: '', linkedinUrl: '', cvUrl: '',
@@ -136,7 +146,7 @@ export const ProfileEditor = () => {
       setSkills(skills.filter((_, idx) => idx !== i))
 
   return (
-      <div className="space-y-8">
+      <div className="space-y-6">
 
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -149,338 +159,364 @@ export const ProfileEditor = () => {
           </Button>
         </div>
 
-        {/* Photo */}
-        <Card>
-          <CardTitle className="mb-4">الصورة الشخصية</CardTitle>
-          <div className="flex items-center gap-6">
-            {companyProfile?.photoUrl ? (
-                <img src={companyProfile.photoUrl} alt="photo"
-                     className="w-20 h-20 rounded-xl object-cover ring-2 ring-primary-500/30" />
-            ) : (
-                <div className="w-20 h-20 rounded-xl bg-slate-800 flex items-center justify-center">
-                  <User size={32} className="text-slate-600" />
-                </div>
-            )}
-            <div>
-              <Button variant="secondary" size="sm" onClick={() => fileRef.current?.click()}>
-                <Upload size={14} /> رفع صورة جديدة
-              </Button>
-              <p className="text-xs text-slate-600 mt-1">JPG, PNG — حتى 5MB</p>
-              <input ref={fileRef} type="file" accept="image/*"
-                     className="hidden" onChange={handlePhoto} />
-            </div>
-          </div>
-        </Card>
+        {/* ─── Tabs Navigation ──────────────────────────────────────────────── */}
+        <div className="flex gap-1 bg-slate-900 border border-slate-800 rounded-xl p-1 w-full">
+          {TABS.map(({ id, label }) => (
+              <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                  ${activeTab === id
+                      ? 'bg-primary-600 text-white shadow-lg'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  }`}
+              >
+                {label}
+              </button>
+          ))}
+        </div>
 
-        {/* Basic Info */}
-        <Card>
-          <CardTitle className="mb-4">المعلومات الأساسية</CardTitle>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Input label="الاسم الكامل"   value={form.fullName}    onChange={e => setForm({...form, fullName: e.target.value})}    placeholder="محمد أحمد" />
-            <Input label="المسمى الوظيفي" value={form.title}       onChange={e => setForm({...form, title: e.target.value})}       placeholder="Full Stack Developer" />
-            <Input label="البريد الإلكتروني" value={form.email}    onChange={e => setForm({...form, email: e.target.value})}       placeholder="example@email.com" />
-            <Input label="الهاتف"          value={form.phone}       onChange={e => setForm({...form, phone: e.target.value})}       placeholder="+966500000000" />
-            <Input label="الموقع"          value={form.location}    onChange={e => setForm({...form, location: e.target.value})}    placeholder="الرياض، السعودية" />
-            <Input label="رابط CV"         value={form.cvUrl}       onChange={e => setForm({...form, cvUrl: e.target.value})}       placeholder="https://..." />
-            <Input label="GitHub"          value={form.githubUrl}   onChange={e => setForm({...form, githubUrl: e.target.value})}   placeholder="https://github.com/..." />
-            <Input label="LinkedIn"        value={form.linkedinUrl} onChange={e => setForm({...form, linkedinUrl: e.target.value})} placeholder="https://linkedin.com/in/..." />
-          </div>
-          <div className="mt-4">
-            <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
-            <textarea rows={3} value={form.bio}
-                      onChange={e => setForm({...form, bio: e.target.value})}
-                      placeholder="اكتب نبذة مختصرة عنك..."
-                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-            />
-          </div>
-        </Card>
+        {/* ─── Tab: المعلومات ───────────────────────────────────────────────── */}
+        {activeTab === 'info' && (
+            <div className="space-y-6">
 
-        {/* Multilingual Info */}
-        <Card>
-          <CardTitle className="mb-4">المعلومات بثلاث لغات</CardTitle>
-
-          {/* العربية */}
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold text-emerald-400 mb-3">🇸🇦 العربية</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <Input label="الاسم" value={form.fullName_ar}
-                     onChange={e => setForm({...form, fullName_ar: e.target.value})}
-                     placeholder="عمر تمر"/>
-              <Input label="المسمى الوظيفي" value={form.title_ar}
-                     onChange={e => setForm({...form, title_ar: e.target.value})}
-                     placeholder="مطور برمجيات"/>
-              <Input label="الموقع" value={form.location_ar}
-                     onChange={e => setForm({...form, location_ar: e.target.value})}
-                     placeholder="برلين، ألمانيا"/>
-            </div>
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة Hero (مختصرة)</label>
-              <textarea rows={2} value={form.bio_short_ar}
-                        onChange={e => setForm({...form, bio_short_ar: e.target.value})}
-                        placeholder="جملة أو جملتان فقط..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-
-
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
-              <textarea rows={2} value={form.bio_ar}
-                        onChange={e => setForm({...form, bio_ar: e.target.value})}
-                        placeholder="نبذة مختصرة بالعربية..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-          </div>
-
-          {/* الإنجليزية */}
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold text-blue-400 mb-3">🇬🇧 English</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <Input label="Full Name" value={form.fullName_en}
-                     onChange={e => setForm({...form, fullName_en: e.target.value})}
-                     placeholder="Omar Tamr"/>
-              <Input label="Job Title" value={form.title_en}
-                     onChange={e => setForm({...form, title_en: e.target.value})}
-                     placeholder="Full Stack Developer"/>
-              <Input label="Location" value={form.location_en}
-                     onChange={e => setForm({...form, location_en: e.target.value})}
-                     placeholder="Berlin, Germany"/>
-            </div>
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Bio (short)</label>
-              <textarea rows={2} value={form.bio_short_en}
-                        onChange={e => setForm({...form, bio_short_en: e.target.value})}
-                        placeholder="One or two sentences only..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">Bio</label>
-              <textarea rows={2} value={form.bio_en}
-                        onChange={e => setForm({...form, bio_en: e.target.value})}
-                        placeholder="Short bio in English..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-          </div>
-
-          {/* الألمانية */}
-          <div>
-            <h3 className="text-sm font-semibold text-amber-400 mb-3">🇩🇪 Deutsch</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <Input label="Vollständiger Name" value={form.fullName_de}
-                     onChange={e => setForm({...form, fullName_de: e.target.value})}
-                     placeholder="Omar Tamr"/>
-              <Input label="Berufsbezeichnung" value={form.title_de}
-                     onChange={e => setForm({...form, title_de: e.target.value})}
-                     placeholder="Full Stack Entwickler"/>
-              <Input label="Standort" value={form.location_de}
-                     onChange={e => setForm({...form, location_de: e.target.value})}
-                     placeholder="Berlin, Deutschland"/>
-            </div>
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Kurzbeschreibung</label>
-              <textarea rows={2} value={form.bio_short_de}
-                        onChange={e => setForm({...form, bio_short_de: e.target.value})}
-                        placeholder="Nur ein oder zwei Sätze..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-
-            <div className="mt-3">
-              <label className="text-sm font-medium text-slate-300 block mb-1.5">Biografie</label>
-              <textarea rows={2} value={form.bio_de}
-                        onChange={e => setForm({...form, bio_de: e.target.value})}
-                        placeholder="Kurze Biografie auf Deutsch..."
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
-              />
-            </div>
-          </div>
-        </Card>
-
-        {/* CV */}
-        <Card>
-          <CardTitle className="mb-4">السيرة الذاتية (PDF)</CardTitle>
-          <div className="flex items-center gap-6">
-            {form.cvUrl ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-emerald-400 text-sm">✅ CV مرفوع</span>
-                  <a href={`http://localhost:8080${form.cvUrl}`}
-                     target="_blank" rel="noreferrer"
-                     className="text-xs text-primary-400 hover:underline">
-                    معاينة
-                  </a>
-                </div>
-            ) : (
-                <span className="text-slate-500 text-sm">لم يُرفع CV بعد</span>
-            )}
-            <Button variant="secondary" size="sm" onClick={() => cvRef.current?.click()}>
-              <Upload size={14} /> رفع CV جديد
-            </Button>
-            <input ref={cvRef} type="file" accept=".pdf"
-                   className="hidden" onChange={handleCv} />
-          </div>
-        </Card>
-
-        {/* Projects */}
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <CardTitle>المشاريع</CardTitle>
-            <Button size="sm" variant="secondary" onClick={addProject}>
-              <Plus size={14} /> إضافة مشروع
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {projects.length === 0 && (
-                <p className="text-slate-600 text-sm text-center py-6">لا توجد مشاريع — أضف مشروعاً جديداً</p>
-            )}
-            {projects.map((p, i) => (
-                <div key={p.id} className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <Badge variant="info">مشروع {i + 1}</Badge>
-                    <button onClick={() => removeProject(i)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-colors">
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    <Input label="اسم المشروع"  value={p.title}       onChange={e => updateProject(i, 'title', e.target.value)}       placeholder="Portfolio Website" />
-                    <Input label="رابط GitHub"  value={p.githubLink ?? ''} onChange={e => updateProject(i, 'githubLink', e.target.value)} placeholder="https://github.com/..." />
-                    <Input label="رابط Demo"    value={p.liveLink ?? ''}   onChange={e => updateProject(i, 'liveLink', e.target.value)}   placeholder="https://..." />
-                    <Input label="التقنيات (افصل بفاصلة)" value={p.technologies.join(', ')}
-                           onChange={e => updateProject(i, 'technologies', e.target.value.split(',').map(t => t.trim()))}
-                           placeholder="React, Java, MongoDB" />
-                  </div>
+              {/* Photo */}
+              <Card>
+                <CardTitle className="mb-4">الصورة الشخصية</CardTitle>
+                <div className="flex items-center gap-6">
+                  {companyProfile?.photoUrl ? (
+                      <img src={companyProfile.photoUrl} alt="photo"
+                           className="w-20 h-20 rounded-xl object-cover ring-2 ring-primary-500/30" />
+                  ) : (
+                      <div className="w-20 h-20 rounded-xl bg-slate-800 flex items-center justify-center">
+                        <User size={32} className="text-slate-600" />
+                      </div>
+                  )}
                   <div>
-                    <label className="text-sm font-medium text-slate-300 block mb-1.5">الوصف</label>
-                    <textarea rows={2} value={p.description}
-                              onChange={e => updateProject(i, 'description', e.target.value)}
-                              placeholder="وصف مختصر للمشروع..."
+                    <Button variant="secondary" size="sm" onClick={() => fileRef.current?.click()}>
+                      <Upload size={14} /> رفع صورة جديدة
+                    </Button>
+                    <p className="text-xs text-slate-600 mt-1">JPG, PNG — حتى 5MB</p>
+                    <input ref={fileRef} type="file" accept="image/*"
+                           className="hidden" onChange={handlePhoto} />
+                  </div>
+                </div>
+              </Card>
+
+              {/* Basic Info */}
+              <Card>
+                <CardTitle className="mb-4">المعلومات الأساسية</CardTitle>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Input label="الاسم الكامل"   value={form.fullName}    onChange={e => setForm({...form, fullName: e.target.value})}    placeholder="محمد أحمد" />
+                  <Input label="المسمى الوظيفي" value={form.title}       onChange={e => setForm({...form, title: e.target.value})}       placeholder="Full Stack Developer" />
+                  <Input label="البريد الإلكتروني" value={form.email}    onChange={e => setForm({...form, email: e.target.value})}       placeholder="example@email.com" />
+                  <Input label="الهاتف"          value={form.phone}       onChange={e => setForm({...form, phone: e.target.value})}       placeholder="+966500000000" />
+                  <Input label="الموقع"          value={form.location}    onChange={e => setForm({...form, location: e.target.value})}    placeholder="الرياض، السعودية" />
+                  <Input label="رابط CV"         value={form.cvUrl}       onChange={e => setForm({...form, cvUrl: e.target.value})}       placeholder="https://..." />
+                  <Input label="GitHub"          value={form.githubUrl}   onChange={e => setForm({...form, githubUrl: e.target.value})}   placeholder="https://github.com/..." />
+                  <Input label="LinkedIn"        value={form.linkedinUrl} onChange={e => setForm({...form, linkedinUrl: e.target.value})} placeholder="https://linkedin.com/in/..." />
+                </div>
+                <div className="mt-4">
+                  <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
+                  <textarea rows={3} value={form.bio}
+                            onChange={e => setForm({...form, bio: e.target.value})}
+                            placeholder="اكتب نبذة مختصرة عنك..."
+                            className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                  />
+                </div>
+              </Card>
+
+              {/* Multilingual Info */}
+              <Card>
+                <CardTitle className="mb-4">المعلومات بثلاث لغات</CardTitle>
+
+                {/* العربية */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-emerald-400 mb-3">🇸🇦 العربية</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Input label="الاسم" value={form.fullName_ar}
+                           onChange={e => setForm({...form, fullName_ar: e.target.value})}
+                           placeholder="عمر تمر"/>
+                    <Input label="المسمى الوظيفي" value={form.title_ar}
+                           onChange={e => setForm({...form, title_ar: e.target.value})}
+                           placeholder="مطور برمجيات"/>
+                    <Input label="الموقع" value={form.location_ar}
+                           onChange={e => setForm({...form, location_ar: e.target.value})}
+                           placeholder="برلين، ألمانيا"/>
+                  </div>
+                  <div className="mt-3">
+                    <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة Hero (مختصرة)</label>
+                    <textarea rows={2} value={form.bio_short_ar}
+                              onChange={e => setForm({...form, bio_short_ar: e.target.value})}
+                              placeholder="جملة أو جملتان فقط..."
                               className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
                     />
                   </div>
-
-                  {/* ─── Mehrsprachigkeit ──────────────────────────────────────── */}
-                  <div className="border-t border-slate-700 pt-3 mt-1 space-y-3">
-                    <p className="text-xs text-slate-500">🌐 Übersetzungen (optional)</p>
-                    <div className="grid md:grid-cols-3 gap-3">
-                      <Input label="🇸🇦 اسم المشروع" value={p.title_ar ?? ''} onChange={e => updateProject(i, 'title_ar', e.target.value)} placeholder="اسم المشروع بالعربية" />
-                      <Input label="🇬🇧 Project Name" value={p.title_en ?? ''} onChange={e => updateProject(i, 'title_en', e.target.value)} placeholder="Project name in English" />
-                      <Input label="🇩🇪 Projektname"  value={p.title_de ?? ''} onChange={e => updateProject(i, 'title_de', e.target.value)} placeholder="Projektname auf Deutsch" />
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-3">
-                      <textarea rows={2} value={p.description_ar ?? ''} onChange={e => updateProject(i, 'description_ar', e.target.value)} placeholder="🇸🇦 الوصف بالعربية..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
-                      <textarea rows={2} value={p.description_en ?? ''} onChange={e => updateProject(i, 'description_en', e.target.value)} placeholder="🇬🇧 Description in English..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
-                      <textarea rows={2} value={p.description_de ?? ''} onChange={e => updateProject(i, 'description_de', e.target.value)} placeholder="🇩🇪 Beschreibung auf Deutsch..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
-                    </div>
+                  <div className="mt-3">
+                    <label className="text-sm font-medium text-slate-300 block mb-1.5">نبذة شخصية</label>
+                    <textarea rows={2} value={form.bio_ar}
+                              onChange={e => setForm({...form, bio_ar: e.target.value})}
+                              placeholder="نبذة مختصرة بالعربية..."
+                              className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                    />
                   </div>
                 </div>
-            ))}
-          </div>
-        </Card>
 
-        {/* Certificates */}
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <CardTitle>الشهادات</CardTitle>
-            <Button size="sm" variant="secondary" onClick={addCertificate}>
-              <Plus size={14} /> إضافة شهادة
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {certificates.length === 0 && (
-                <p className="text-slate-600 text-sm text-center py-6">لا توجد شهادات — أضف شهادة جديدة</p>
-            )}
-            {certificates.map((c, i) => (
-                <div key={c.id} className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <Badge variant="success">شهادة {i + 1}</Badge>
-                    <button onClick={() => removeCertificate(i)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-colors">
-                      <Trash2 size={14} />
-                    </button>
+                {/* الإنجليزية */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-blue-400 mb-3">🇬🇧 English</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Input label="Full Name" value={form.fullName_en}
+                           onChange={e => setForm({...form, fullName_en: e.target.value})}
+                           placeholder="Omar Tamr"/>
+                    <Input label="Job Title" value={form.title_en}
+                           onChange={e => setForm({...form, title_en: e.target.value})}
+                           placeholder="Full Stack Developer"/>
+                    <Input label="Location" value={form.location_en}
+                           onChange={e => setForm({...form, location_en: e.target.value})}
+                           placeholder="Berlin, Germany"/>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    <Input label="اسم الشهادة"   value={c.title}         onChange={e => updateCertificate(i, 'title', e.target.value)}         placeholder="AWS Certified Developer" />
-                    <Input label="الجهة المانحة" value={c.issuer}        onChange={e => updateCertificate(i, 'issuer', e.target.value)}        placeholder="Amazon Web Services" />
-                    <Input label="التاريخ"        value={c.date}          onChange={e => updateCertificate(i, 'date', e.target.value)}          placeholder="2024-01" />
-                    <Input label="رابط التحقق"   value={c.credentialUrl ?? ''} onChange={e => updateCertificate(i, 'credentialUrl', e.target.value)} placeholder="https://..." />
+                  <div className="mt-3">
+                    <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Bio (short)</label>
+                    <textarea rows={2} value={form.bio_short_en}
+                              onChange={e => setForm({...form, bio_short_en: e.target.value})}
+                              placeholder="One or two sentences only..."
+                              className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                    />
                   </div>
-
-                  {/* ─── Mehrsprachigkeit ──────────────────────────────────────── */}
-                  <div className="border-t border-slate-700 pt-3 mt-1 space-y-3">
-                    <p className="text-xs text-slate-500">🌐 Übersetzungen (optional)</p>
-                    <div className="grid md:grid-cols-3 gap-3">
-                      <Input label="🇸🇦 اسم الشهادة" value={c.title_ar ?? ''} onChange={e => updateCertificate(i, 'title_ar', e.target.value)} placeholder="اسم الشهادة بالعربية" />
-                      <Input label="🇬🇧 Certificate"  value={c.title_en ?? ''} onChange={e => updateCertificate(i, 'title_en', e.target.value)} placeholder="Certificate name in English" />
-                      <Input label="🇩🇪 Zertifikat"   value={c.title_de ?? ''} onChange={e => updateCertificate(i, 'title_de', e.target.value)} placeholder="Zertifikatname auf Deutsch" />
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-3">
-                      <Input label="🇸🇦 الجهة المانحة" value={c.issuer_ar ?? ''} onChange={e => updateCertificate(i, 'issuer_ar', e.target.value)} placeholder="الجهة بالعربية" />
-                      <Input label="🇬🇧 Issuer"         value={c.issuer_en ?? ''} onChange={e => updateCertificate(i, 'issuer_en', e.target.value)} placeholder="Issuer in English" />
-                      <Input label="🇩🇪 Aussteller"     value={c.issuer_de ?? ''} onChange={e => updateCertificate(i, 'issuer_de', e.target.value)} placeholder="Aussteller auf Deutsch" />
-                    </div>
+                  <div className="mt-3">
+                    <label className="text-sm font-medium text-slate-300 block mb-1.5">Bio</label>
+                    <textarea rows={2} value={form.bio_en}
+                              onChange={e => setForm({...form, bio_en: e.target.value})}
+                              placeholder="Short bio in English..."
+                              className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                    />
                   </div>
                 </div>
-            ))}
-          </div>
-        </Card>
 
-        {/* Skills */}
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <CardTitle>المهارات</CardTitle>
-            <Button size="sm" variant="secondary" onClick={addSkill}>
-              <Plus size={14} /> إضافة مهارة
-            </Button>
-          </div>
-          <div className="grid md:grid-cols-2 gap-3">
-            {skills.length === 0 && (
-                <p className="text-slate-600 text-sm text-center py-6 col-span-2">لا توجد مهارات — أضف مهارة جديدة</p>
-            )}
-            {skills.map((s, i) => (
-                <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <Badge>{s.name || 'مهارة جديدة'}</Badge>
-                    <button onClick={() => removeSkill(i)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-colors">
-                      <Trash2 size={14} />
-                    </button>
+                {/* الألمانية */}
+                <div>
+                  <h3 className="text-sm font-semibold text-amber-400 mb-3">🇩🇪 Deutsch</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Input label="Vollständiger Name" value={form.fullName_de}
+                           onChange={e => setForm({...form, fullName_de: e.target.value})}
+                           placeholder="Omar Tamr"/>
+                    <Input label="Berufsbezeichnung" value={form.title_de}
+                           onChange={e => setForm({...form, title_de: e.target.value})}
+                           placeholder="Full Stack Entwickler"/>
+                    <Input label="Standort" value={form.location_de}
+                           onChange={e => setForm({...form, location_de: e.target.value})}
+                           placeholder="Berlin, Deutschland"/>
                   </div>
-                  <Input label="اسم المهارة" value={s.name}
-                         onChange={e => updateSkill(i, 'name', e.target.value)}
-                         placeholder="React" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-sm font-medium text-slate-300">المستوى</label>
-                      <select value={s.level}
-                              onChange={e => updateSkill(i, 'level', e.target.value)}
-                              className="px-3 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-sm font-medium text-slate-300">التصنيف</label>
-                      <select value={s.category}
-                              onChange={e => updateSkill(i, 'category', e.target.value)}
-                              className="px-3 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
-                        <option value="Frontend">Frontend</option>
-                        <option value="Backend">Backend</option>
-                        <option value="Database">Database</option>
-                        <option value="DevOps">DevOps</option>
-                        <option value="Mobile">Mobile</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
+                  <div className="mt-3">
+                    <label className="text-sm font-medium text-slate-300 block mb-1.5">Hero Kurzbeschreibung</label>
+                    <textarea rows={2} value={form.bio_short_de}
+                              onChange={e => setForm({...form, bio_short_de: e.target.value})}
+                              placeholder="Nur ein oder zwei Sätze..."
+                              className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <label className="text-sm font-medium text-slate-300 block mb-1.5">Biografie</label>
+                    <textarea rows={2} value={form.bio_de}
+                              onChange={e => setForm({...form, bio_de: e.target.value})}
+                              placeholder="Kurze Biografie auf Deutsch..."
+                              className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                    />
                   </div>
                 </div>
-            ))}
-          </div>
-        </Card>
+              </Card>
+
+              {/* CV */}
+              <Card>
+                <CardTitle className="mb-4">السيرة الذاتية (PDF)</CardTitle>
+                <div className="flex items-center gap-6">
+                  {form.cvUrl ? (
+                      <div className="flex items-center gap-3">
+                        <span className="text-emerald-400 text-sm">✅ CV مرفوع</span>
+                        <a href={`http://localhost:8080${form.cvUrl}`}
+                           target="_blank" rel="noreferrer"
+                           className="text-xs text-primary-400 hover:underline">
+                          معاينة
+                        </a>
+                      </div>
+                  ) : (
+                      <span className="text-slate-500 text-sm">لم يُرفع CV بعد</span>
+                  )}
+                  <Button variant="secondary" size="sm" onClick={() => cvRef.current?.click()}>
+                    <Upload size={14} /> رفع CV جديد
+                  </Button>
+                  <input ref={cvRef} type="file" accept=".pdf"
+                         className="hidden" onChange={handleCv} />
+                </div>
+              </Card>
+
+            </div>
+        )}
+
+        {/* ─── Tab: المشاريع ────────────────────────────────────────────────── */}
+        {activeTab === 'projects' && (
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <CardTitle>المشاريع</CardTitle>
+                <Button size="sm" variant="secondary" onClick={addProject}>
+                  <Plus size={14} /> إضافة مشروع
+                </Button>
+              </div>
+              <div className="space-y-4">
+                {projects.length === 0 && (
+                    <p className="text-slate-600 text-sm text-center py-6">لا توجد مشاريع — أضف مشروعاً جديداً</p>
+                )}
+                {projects.map((p, i) => (
+                    <div key={p.id} className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <Badge variant="info">مشروع {i + 1}</Badge>
+                        <button onClick={() => removeProject(i)}
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-colors">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-3">
+                        <Input label="اسم المشروع"  value={p.title}       onChange={e => updateProject(i, 'title', e.target.value)}       placeholder="Portfolio Website" />
+                        <Input label="رابط GitHub"  value={p.githubLink ?? ''} onChange={e => updateProject(i, 'githubLink', e.target.value)} placeholder="https://github.com/..." />
+                        <Input label="رابط Demo"    value={p.liveLink ?? ''}   onChange={e => updateProject(i, 'liveLink', e.target.value)}   placeholder="https://..." />
+                        <Input label="التقنيات (افصل بفاصلة)" value={p.technologies.join(', ')}
+                               onChange={e => updateProject(i, 'technologies', e.target.value.split(',').map(t => t.trim()))}
+                               placeholder="React, Java, MongoDB" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-slate-300 block mb-1.5">الوصف</label>
+                        <textarea rows={2} value={p.description}
+                                  onChange={e => updateProject(i, 'description', e.target.value)}
+                                  placeholder="وصف مختصر للمشروع..."
+                                  className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
+                        />
+                      </div>
+
+                      {/* ─── Mehrsprachigkeit ──────────────────────────────────────── */}
+                      <div className="border-t border-slate-700 pt-3 mt-1 space-y-3">
+                        <p className="text-xs text-slate-500">🌐 Übersetzungen (optional)</p>
+                        <div className="grid md:grid-cols-3 gap-3">
+                          <Input label="🇸🇦 اسم المشروع" value={p.title_ar ?? ''} onChange={e => updateProject(i, 'title_ar', e.target.value)} placeholder="اسم المشروع بالعربية" />
+                          <Input label="🇬🇧 Project Name" value={p.title_en ?? ''} onChange={e => updateProject(i, 'title_en', e.target.value)} placeholder="Project name in English" />
+                          <Input label="🇩🇪 Projektname"  value={p.title_de ?? ''} onChange={e => updateProject(i, 'title_de', e.target.value)} placeholder="Projektname auf Deutsch" />
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-3">
+                          <textarea rows={2} value={p.description_ar ?? ''} onChange={e => updateProject(i, 'description_ar', e.target.value)} placeholder="🇸🇦 الوصف بالعربية..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                          <textarea rows={2} value={p.description_en ?? ''} onChange={e => updateProject(i, 'description_en', e.target.value)} placeholder="🇬🇧 Description in English..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                          <textarea rows={2} value={p.description_de ?? ''} onChange={e => updateProject(i, 'description_de', e.target.value)} placeholder="🇩🇪 Beschreibung auf Deutsch..." className="w-full px-4 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                        </div>
+                      </div>
+                    </div>
+                ))}
+              </div>
+            </Card>
+        )}
+
+        {/* ─── Tab: الشهادات ────────────────────────────────────────────────── */}
+        {activeTab === 'certificates' && (
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <CardTitle>الشهادات</CardTitle>
+                <Button size="sm" variant="secondary" onClick={addCertificate}>
+                  <Plus size={14} /> إضافة شهادة
+                </Button>
+              </div>
+              <div className="space-y-4">
+                {certificates.length === 0 && (
+                    <p className="text-slate-600 text-sm text-center py-6">لا توجد شهادات — أضف شهادة جديدة</p>
+                )}
+                {certificates.map((c, i) => (
+                    <div key={c.id} className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <Badge variant="success">شهادة {i + 1}</Badge>
+                        <button onClick={() => removeCertificate(i)}
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-colors">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-3">
+                        <Input label="اسم الشهادة"   value={c.title}         onChange={e => updateCertificate(i, 'title', e.target.value)}         placeholder="AWS Certified Developer" />
+                        <Input label="الجهة المانحة" value={c.issuer}        onChange={e => updateCertificate(i, 'issuer', e.target.value)}        placeholder="Amazon Web Services" />
+                        <Input label="التاريخ"        value={c.date}          onChange={e => updateCertificate(i, 'date', e.target.value)}          placeholder="2024-01" />
+                        <Input label="رابط التحقق"   value={c.credentialUrl ?? ''} onChange={e => updateCertificate(i, 'credentialUrl', e.target.value)} placeholder="https://..." />
+                      </div>
+
+                      {/* ─── Mehrsprachigkeit ──────────────────────────────────────── */}
+                      <div className="border-t border-slate-700 pt-3 mt-1 space-y-3">
+                        <p className="text-xs text-slate-500">🌐 Übersetzungen (optional)</p>
+                        <div className="grid md:grid-cols-3 gap-3">
+                          <Input label="🇸🇦 اسم الشهادة" value={c.title_ar ?? ''} onChange={e => updateCertificate(i, 'title_ar', e.target.value)} placeholder="اسم الشهادة بالعربية" />
+                          <Input label="🇬🇧 Certificate"  value={c.title_en ?? ''} onChange={e => updateCertificate(i, 'title_en', e.target.value)} placeholder="Certificate name in English" />
+                          <Input label="🇩🇪 Zertifikat"   value={c.title_de ?? ''} onChange={e => updateCertificate(i, 'title_de', e.target.value)} placeholder="Zertifikatname auf Deutsch" />
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-3">
+                          <Input label="🇸🇦 الجهة المانحة" value={c.issuer_ar ?? ''} onChange={e => updateCertificate(i, 'issuer_ar', e.target.value)} placeholder="الجهة بالعربية" />
+                          <Input label="🇬🇧 Issuer"         value={c.issuer_en ?? ''} onChange={e => updateCertificate(i, 'issuer_en', e.target.value)} placeholder="Issuer in English" />
+                          <Input label="🇩🇪 Aussteller"     value={c.issuer_de ?? ''} onChange={e => updateCertificate(i, 'issuer_de', e.target.value)} placeholder="Aussteller auf Deutsch" />
+                        </div>
+                      </div>
+                    </div>
+                ))}
+              </div>
+            </Card>
+        )}
+
+        {/* ─── Tab: المهارات ────────────────────────────────────────────────── */}
+        {activeTab === 'skills' && (
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <CardTitle>المهارات</CardTitle>
+                <Button size="sm" variant="secondary" onClick={addSkill}>
+                  <Plus size={14} /> إضافة مهارة
+                </Button>
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                {skills.length === 0 && (
+                    <p className="text-slate-600 text-sm text-center py-6 col-span-2">لا توجد مهارات — أضف مهارة جديدة</p>
+                )}
+                {skills.map((s, i) => (
+                    <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <Badge>{s.name || 'مهارة جديدة'}</Badge>
+                        <button onClick={() => removeSkill(i)}
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-colors">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                      <Input label="اسم المهارة" value={s.name}
+                             onChange={e => updateSkill(i, 'name', e.target.value)}
+                             placeholder="React" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-sm font-medium text-slate-300">المستوى</label>
+                          <select value={s.level}
+                                  onChange={e => updateSkill(i, 'level', e.target.value)}
+                                  className="px-3 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-sm font-medium text-slate-300">التصنيف</label>
+                          <select value={s.category}
+                                  onChange={e => updateSkill(i, 'category', e.target.value)}
+                                  className="px-3 py-2.5 rounded-lg text-sm bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Database">Database</option>
+                            <option value="DevOps">DevOps</option>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                ))}
+              </div>
+            </Card>
+        )}
 
         {/* Save Button Bottom */}
         <div className="flex justify-end pb-8">
