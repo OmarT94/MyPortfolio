@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 export const useVisitTracker = (companyToken: string | null) => {
   const visitedPages = useRef<Set<string>>(new Set(['profile', 'projects']))
   const startTime = useRef<number>(0)  // ← 0 statt Date.now()
-  const hasSent      = useRef<boolean>(false)
+  const hasSent      = useRef<boolean>(false)  // ← verhindert doppeltes Senden
   const backendUrl = import.meta.env.VITE_BACKEND_URL
 
   const trackPage = (page: string) => {
@@ -12,9 +12,10 @@ export const useVisitTracker = (companyToken: string | null) => {
 
   useEffect(() => {
     if (!companyToken) return
-    startTime.current = Date.now()  // ← hier initialisieren
+    startTime.current = Date.now()
 
-    const sendData = () => {
+    const handleUnload = () => {
+      // ─── Bereits gesendet? → abbrechen ───────────────────────────────────
       if (hasSent.current) return
       hasSent.current = true
 
@@ -29,19 +30,23 @@ export const useVisitTracker = (companyToken: string | null) => {
       )
       navigator.sendBeacon(`${backendUrl}/api/public/visits/log`, blob)
 
+      // ─── Reset nach 2 Sekunden falls Seite noch offen ist (z.B. Download) ─
       setTimeout(() => { hasSent.current = false }, 2000)
     }
 
+    // ─── iOS Safari Fix: visibilitychange ────────────────────────────────
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') handleUnload()
+    }
+
     // ← für Desktop
-    window.addEventListener('beforeunload', sendData)
+    window.addEventListener('beforeunload', handleUnload)
     // ← für iOS Safari
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') sendData()
-    })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
-      window.removeEventListener('beforeunload', sendData)
-      document.removeEventListener('visibilitychange', sendData)
+      window.removeEventListener('beforeunload', handleUnload)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [companyToken])
 
