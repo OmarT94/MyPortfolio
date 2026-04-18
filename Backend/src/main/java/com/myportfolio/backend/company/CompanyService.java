@@ -19,7 +19,8 @@ public class CompanyService {
     private final ApplicationEventPublisher eventPublisher;
     private final JobApplicationRepo jobApplicationRepo;
 
-    private String frontendUrl = "https://www.omartamr.com";
+    @Value("${app.frontend.base-url}")
+    private String frontendUrl;
 
     public CompanyService(CompanyRepo companyRepo,
                           ApplicationEventPublisher eventPublisher,
