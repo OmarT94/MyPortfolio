@@ -30,6 +30,17 @@ export const AdminDashboard = () => {
     useNotificationStore.getState().fetchAll()
   }, [token])
 
+  // ─── Polling für Mobile (WebSocket wird auf iOS getrennt) ─────────────
+  useEffect(() => {
+    const interval = setInterval(() => {
+      useVisitStore.getState().fetchAll()
+      useVisitStore.getState().fetchStats()
+      useNotificationStore.getState().fetchUnreadCount()
+    }, 30000) // alle 30 Sekunden
+
+    return () => clearInterval(interval)
+  }, [])
+
   if (!token) return <div style={{ color: 'white' }}>No token!</div>
 
   return (
